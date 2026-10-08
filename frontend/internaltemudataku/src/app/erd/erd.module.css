@@ -1,0 +1,148 @@
+/*
+ * Scoped styles for the pan/zoom canvas + SVG relation lines + table boxes.
+ * Kept as a CSS Module (not Tailwind utilities) on purpose: this is a
+ * data-driven diagram with hundreds of dynamically-positioned/sized nodes
+ * and hover/selection states, not a typical box layout -- utility classes
+ * would mostly end up as inline styles for the dynamic parts anyway. The
+ * surrounding chrome (sidebar, search, buttons, panels) uses Tailwind
+ * classes directly in ErdViewer.tsx, matching the rest of the app.
+ */
+
+.viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  cursor: grab;
+  background:
+    radial-gradient(
+      circle at 1px 1px,
+      var(--erd-dot) 1.4px,
+      transparent 0
+    )
+    0 0 / 26px 26px,
+    var(--erd-bg);
+}
+.viewport.panning {
+  cursor: grabbing;
+}
+
+.world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.modbg {
+  position: absolute;
+  border-radius: 16px;
+  border: 1px solid;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modlabel {
+  position: absolute;
+  top: -30px;
+  left: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-family: var(--font-sans, Inter, sans-serif);
+  filter: var(--erd-label-filter, none);
+}
+.modcount {
+  color: var(--erd-faint);
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.relLayer path {
+  fill: none;
+  stroke: var(--erd-line);
+  stroke-width: 1.4;
+  opacity: 0.35;
+  transition:
+    opacity 0.2s,
+    stroke 0.2s,
+    stroke-width 0.2s;
+}
+.relLayer path.hl {
+  stroke: var(--erd-line-hl);
+  opacity: 1;
+  /* non-scaling-stroke: tebal garis dihitung dalam piksel layar, bukan
+     ikut mengecil bersama zoom. Tanpa ini, di zoom 14% garis menyala
+     setebal ~0.4px dan hampir tidak terlihat. */
+  vector-effect: non-scaling-stroke;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 3px var(--erd-line-hl));
+}
+.relLayer path.dim {
+  opacity: 0.05;
+}
+
+.tbox {
+  position: absolute;
+  background: var(--erd-tbox-bg);
+  border: 1px solid var(--erd-tbox-border);
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: var(--erd-shadow);
+  transition:
+    opacity 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+  cursor: pointer;
+  font-family: var(--font-mono, ui-monospace, "SF Mono", Consolas, monospace);
+}
+.tbox.dim {
+  opacity: 0.16;
+}
+.tbox.hl {
+  border-color: var(--erd-line-hl);
+  box-shadow: var(--erd-shadow-hl);
+  z-index: 5;
+}
+.thead {
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0b0e14;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.trow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2.5px 9px;
+  font-size: 10.5px;
+  border-top: 1px solid var(--erd-row-border);
+  white-space: nowrap;
+}
+.trow .flag {
+  width: 11px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 9px;
+}
+.trow .cname {
+  color: var(--erd-cname);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.trow.isfk .cname {
+  color: var(--erd-fk);
+}
+.trow.ispk .cname {
+  color: var(--erd-pk);
+  font-weight: 700;
+}
+.trow .ctype {
+  margin-left: auto;
+  color: var(--erd-ctype);
+  font-size: 9.5px;
+  padding-left: 6px;
+  flex-shrink: 0;
+}

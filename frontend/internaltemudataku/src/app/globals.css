@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+ * Theme tokens
+ * Default (tanpa atribut data-theme) = gelap, supaya tampilan tetap sama
+ * kalau JavaScript belum jalan. Atribut data-theme di <html> diset oleh
+ * script kecil di layout.tsx + tombol ThemeToggle.
+ * ------------------------------------------------------------------ */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --erd-bg: #0b0e14; /* canvas */
+  --erd-side: #11151d; /* sidebar */
+  --erd-panel: #161b26; /* card, input, tombol */
+  --erd-border: #232a38;
+  --erd-text: #dbe2ef;
+  --erd-muted: #7c8797;
+  --erd-faint: #4b5566;
+  --erd-accent: #fbbf24; /* hover / fokus */
+  --erd-warn: rgb(252 211 77 / 0.9); /* teks pesan peringatan */
+
+  /* canvas & diagram */
+  --erd-dot: #1a2130;
+  --erd-line: #3a4356;
+  --erd-line-hl: #e8b34a;
+  --erd-tbox-bg: #161b26;
+  --erd-tbox-border: #232a38;
+  --erd-row-border: #1c2230;
+  --erd-cname: #dbe2ef;
+  --erd-ctype: #4b5566;
+  --erd-pk: #e8b34a;
+  --erd-fk: #9fb3d6;
+  --erd-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  --erd-shadow-hl: 0 0 0 2px rgba(232, 179, 74, 0.35),
+    0 4px 18px rgba(0, 0, 0, 0.4);
+  --erd-label-filter: none;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --erd-bg: #f4f6fa;
+  --erd-side: #ffffff;
+  --erd-panel: #f1f4f9;
+  --erd-border: #d9dfe9;
+  --erd-text: #1b2230;
+  --erd-muted: #5b6678;
+  --erd-faint: #7a8496;
+  --erd-accent: #b45309;
+  --erd-warn: #92400e;
+
+  --erd-dot: #d3d9e4;
+  --erd-line: #aab4c5;
+  --erd-line-hl: #d97706;
+  --erd-tbox-bg: #ffffff;
+  --erd-tbox-border: #d3dae6;
+  --erd-row-border: #edf0f5;
+  --erd-cname: #1b2230;
+  --erd-ctype: #7a8496;
+  --erd-pk: #b45309;
+  --erd-fk: #3d5a99;
+  --erd-shadow: 0 2px 10px rgba(20, 30, 50, 0.12);
+  --erd-shadow-hl: 0 0 0 2px rgba(217, 119, 6, 0.3),
+    0 4px 18px rgba(20, 30, 50, 0.18);
+  /* warna modul yang terang (kuning/abu) dibuat sedikit lebih gelap di tema terang */
+  --erd-label-filter: brightness(0.78) saturate(1.15);
+}
+
+/* Daftarkan token sebagai warna Tailwind: bg-erd-bg, text-erd-text, dst. */
+@theme inline {
+  --color-erd-bg: var(--erd-bg);
+  --color-erd-side: var(--erd-side);
+  --color-erd-panel: var(--erd-panel);
+  --color-erd-border: var(--erd-border);
+  --color-erd-text: var(--erd-text);
+  --color-erd-muted: var(--erd-muted);
+  --color-erd-faint: var(--erd-faint);
+  --color-erd-accent: var(--erd-accent);
+  --color-erd-warn: var(--erd-warn);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--erd-bg);
+  color: var(--erd-text);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}

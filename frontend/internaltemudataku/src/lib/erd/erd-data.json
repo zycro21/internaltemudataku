@@ -1,0 +1,8724 @@
+[
+  {
+    "table": "activity_logs",
+    "model": "AdminActivityLog",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "action",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "ipAddress",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "userAgent",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "type",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "affiliator_profiles",
+    "model": "AffiliatorProfile",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "currentTier",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "totalPoints",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "joinedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "affiliator_seasons",
+    "model": "AffiliatorSeason",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "seasonName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "endDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "affiliator_season_points",
+    "model": "AffiliatorSeasonPoint",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "affiliatorProfileId",
+        "type": "String",
+        "pk": false,
+        "fk": "affiliator_profiles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "seasonId",
+        "type": "String",
+        "pk": false,
+        "fk": "affiliator_seasons",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "points",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tierAtSeasonStart",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tierAtSeasonEnd",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "maintenanceQuotaMet",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "affiliator_product_configs",
+    "model": "AffiliatorProductConfig",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "productType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tier",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "commissionAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "discountAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "commissionPercent",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "discountPercent",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "pointsAwarded",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "articles",
+    "model": "Article",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "authorId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "excerpt",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "coverImage",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "categoryId",
+        "type": "String",
+        "pk": false,
+        "fk": "article_categories",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "tags",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "ArticleStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isRecommended",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "publishedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deletedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "article_categories",
+    "model": "ArticleCategory",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "article_blocks",
+    "model": "ArticleBlock",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "articleId",
+        "type": "String",
+        "pk": false,
+        "fk": "articles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_content_blocks",
+    "model": "ArticleContentBlock",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "blockId",
+        "type": "String",
+        "pk": false,
+        "fk": "article_blocks",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "ArticleContentBlockType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_heading_contents",
+    "model": "ArticleHeadingContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "level",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_paragraph_contents",
+    "model": "ArticleParagraphContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_highlight_contents",
+    "model": "ArticleHighlightContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_contents",
+    "model": "ArticleTableContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_columns",
+    "model": "ArticleTableColumn",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tableId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_table_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "header",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_rows",
+    "model": "ArticleTableRow",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tableId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_table_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_cells",
+    "model": "ArticleTableCell",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rowId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_table_rows",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "columnId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_table_columns",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "value",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_divider_contents",
+    "model": "ArticleDividerContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "style",
+        "type": "ArticleDividerStyle",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_link_contents",
+    "model": "ArticleLinkContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "linkText",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "linkType",
+        "type": "ArticleLinkType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "externalUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "targetContentBlockId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "targetAdditionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_additional_contents",
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_of_content_contents",
+    "model": "ArticleTableOfContentContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "articleId",
+        "type": "String",
+        "pk": false,
+        "fk": "articles",
+        "unique": true,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_article_table_of_content_items",
+    "model": "ArticleTableOfContentItem",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tocId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_table_of_content_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "label",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "targetContentBlockId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_content_blocks",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "targetAdditionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_additional_contents",
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_additional_contents",
+    "model": "ArticleAdditionalContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "blockId",
+        "type": "String",
+        "pk": false,
+        "fk": "article_blocks",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "ArticleAdditionalContentType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "AnchorPosition",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_article_image_video_contents",
+    "model": "ArticleImageVideoContent",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "additionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_article_additional_contents",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "caption",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "mediaType",
+        "type": "MediaType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "url",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "thumbnailUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "durationSeconds",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "widthPercent",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "article_element_favorites",
+    "model": "ArticleElementFavorite",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "elementType",
+        "type": "ArticleElementType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "article_likes",
+    "model": "ArticleLike",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "articleId",
+        "type": "String",
+        "pk": false,
+        "fk": "articles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "article_comments",
+    "model": "ArticleComment",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "articleId",
+        "type": "String",
+        "pk": false,
+        "fk": "articles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "parentId",
+        "type": "String",
+        "pk": false,
+        "fk": "article_comments",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deletedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "article_comment_likes",
+    "model": "ArticleCommentLike",
+    "module": "Article",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "commentId",
+        "type": "String",
+        "pk": false,
+        "fk": "article_comments",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "aycl_batches",
+    "model": "AYCLBatch",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "headline",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subHeadline",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "whatsappGroupLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "price",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "endDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "aycl_sections",
+    "model": "AYCLSection",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "batchId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_batches",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "AYCLSectionType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "order",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "aycl_materials",
+    "model": "AYCLMaterial",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "batchId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_batches",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "aycl_schedules",
+    "model": "AYCLSchedule",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "batchId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_batches",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "date",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startTime",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "endTime",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "googleMeetLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "quota",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "aycl_bookings",
+    "model": "AYCLBooking",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "batchId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_batches",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralUsageId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_usages",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "currentStatus",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "institution",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "studyProgram",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "semester",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "age",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reason",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "familiarity",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "aycl_participants",
+    "model": "AYCLParticipant",
+    "module": "AYCL",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "bookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_bookings",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "scheduleId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_schedules",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "bookings",
+    "model": "Booking",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "menteeId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentoringServiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralUsageId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_usages",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "bookingDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "specialRequests",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "material",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "expectedOutput",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "supportDocument",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "booking_invoices",
+    "model": "BookingInvoice",
+    "module": "Payment & Withdrawal",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "bookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "bookings",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "totalAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "paidAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "remainingAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "paymentType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "installmentCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "booking_participants",
+    "model": "BookingParticipant",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "bookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "bookings",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "paymentStatus",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "paymentId",
+        "type": "String",
+        "pk": false,
+        "fk": "payments",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isLeader",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "certificates",
+    "model": "Certificate",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "menteeId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "certificateNumber",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "issueDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "certificatePath",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "googleDriveUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "projectCertificatePath",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "verifiedBy",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "note",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "commission_payments",
+    "model": "CommissionPayments",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralCodeId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_codes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "amount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "transactionId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "paid_at",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "notes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "withdrawalMethodId",
+        "type": "String",
+        "pk": false,
+        "fk": "withdrawal_methods",
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "export_logs",
+    "model": "ExportLog",
+    "module": "Modul Pendukung",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "entity",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "e_learning_audit_logs",
+    "model": "ELearningAuditLog",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "entityType",
+        "type": "ELearningAuditEntityType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "entityId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "action",
+        "type": "ELearningAuditAction",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "oldValue",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "newValue",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "e_learning_courses",
+    "model": "ELearningCourse",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "thumbnailImages",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "category",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "tags",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "targetAudience",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "level",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "estimatedDuration",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "benefits",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "toolsUsed",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "slug",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "CourseStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_course_stream_counts",
+    "model": "ELearningCourseStreamCount",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "courseId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_courses",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "streamCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_sub_chapters",
+    "model": "ELearningSubChapter",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "courseId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_courses",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "coverImage",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "estimatedTime",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "taskType",
+        "type": "TaskType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "CourseStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "level",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_sub_babs",
+    "model": "ELearningSubBab",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subChapterId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_chapters",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "estimatedTime",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "CourseStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_texts",
+    "model": "ELearningText",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subBabId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_babs",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "CourseStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_text_blocks",
+    "model": "ELearningTextBlock",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "textId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_texts",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_content_blocks",
+    "model": "ELearningContentBlock",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "blockId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_text_blocks",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "ContentBlockType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_heading_contents",
+    "model": "ELearningHeadingContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "level",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_paragraph_contents",
+    "model": "ELearningParagraphContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_highlight_contents",
+    "model": "ELearningHighlightContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "text",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_accordion_contents",
+    "model": "ELearningAccordionContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_accordion_items",
+    "model": "ELearningAccordionItem",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "accordionId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_accordion_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_carousel_contents",
+    "model": "ELearningCarouselContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "cardsPerSlide",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_carousel_items",
+    "model": "ELearningCarouselItem",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "carouselId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_carousel_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "image",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_content_card_contents",
+    "model": "ELearningContentCardContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "disableExpandableContent",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_content_card_items",
+    "model": "ELearningContentCardItem",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "cardId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_card_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "expandableContent",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_tab_navigation_contents",
+    "model": "ELearningTabNavigationContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_tab_items",
+    "model": "ELearningTabItem",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tabId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_tab_navigation_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_summary_contents",
+    "model": "ELearningSummaryContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "contentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_content_blocks",
+        "unique": true,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_summary_comments",
+    "model": "ELearningSummaryComment",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "summaryId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_summary_contents",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "comment",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_additional_contents",
+    "model": "ELearningAdditionalContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "blockId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_text_blocks",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "AdditionalContentType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "AnchorPosition",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_matching_questions",
+    "model": "ELearningMatchingQuestion",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "additionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_additional_contents",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "instruction",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "maxScore",
+        "type": "Float",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "explanation",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_matching_items",
+    "model": "ELearningMatchingItem",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "questionId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_matching_questions",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "side",
+        "type": "MatchingItemSide",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "matchWithId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_multiple_choice_questions",
+    "model": "ELearningMultipleChoiceQuestion",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "additionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_additional_contents",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "question",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "allowMultiple",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "explanation",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_multiple_choice_options",
+    "model": "ELearningMultipleChoiceOption",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "questionId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_multiple_choice_questions",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isCorrect",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_image_video_contents",
+    "model": "ELearningImageVideoContent",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "additionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_additional_contents",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "caption",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "mediaType",
+        "type": "MediaType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "url",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "thumbnailUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "durationSeconds",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "widthPercent",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_executable_codes",
+    "model": "ELearningExecutableCode",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "additionalContentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_additional_contents",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "language",
+        "type": "CodeLanguage",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "initialCode",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isEditable",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "expectedResult",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_code_runs",
+    "model": "ELearningCodeRun",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "executableId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_executable_codes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "input",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "output",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "error",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "executedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "executionTime",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isSuccess",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_quizzes",
+    "model": "ELearningQuiz",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "textId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_texts",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "totalQuestions",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "timeLimitMinutes",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_questions",
+    "model": "ELearningQuestion",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "quizId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_quizzes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "questionText",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "options",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "correctAnswers",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "explanation",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_quiz_attempts",
+    "model": "ELearningQuizAttempt",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "quizId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_quizzes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "score",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "startedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "completedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "answers",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "attemptNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isAutoGraded",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "gradedBy",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "gradedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "remarks",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_assignments",
+    "model": "ELearningAssignment",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "textId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_texts",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "dueDays",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_assignment_instructions",
+    "model": "ELearningAssignmentInstruction",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "assignmentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_assignments",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "instruction",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "ct_e_learning_assignment_supporting_files",
+    "model": "ELearningAssignmentSupportingFile",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "assignmentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_assignments",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "SupportingFileType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "url",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "pageCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "format",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "sizeKB",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_submissions",
+    "model": "ELearningSubmission",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "assignmentId",
+        "type": "String",
+        "pk": false,
+        "fk": "ct_e_learning_assignments",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "attemptNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "notes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "files",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "submittedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "ELearningSubmissionStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "reviewedById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reviewedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "feedback",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "score",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "gradeBreakdown",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isRevisionRequired",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "revisionDeadline",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_subscription_plans",
+    "model": "ELearningSubscriptionPlan",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "durationDay",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "price",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_subscriptions",
+    "model": "ELearningSubscription",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "planId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_subscription_plans",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralUsageId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_usages",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "startAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "endAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_progress",
+    "model": "ELearningProgress",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subBabId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_babs",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isCompleted",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "lastAccessed",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "timeSpent",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "lastActivityAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_sub_chapter_progress",
+    "model": "ELearningSubChapterProgress",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subChapterId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_chapters",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "progressPercent",
+        "type": "Float",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "lastActivityAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "e_learning_text_progress",
+    "model": "ELearningTextProgress",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "textId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_texts",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "progress",
+        "type": "Float",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "lastAccessedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "e_learning_block_progress",
+    "model": "ELearningBlockProgress",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "blockId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_text_blocks",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "progress",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isCompleted",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "timeSpent",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "lastActivityAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_reviews",
+    "model": "ELearningReview",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subChapterId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_chapters",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rating",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "comment",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isPublic",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isAnonymous",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_certificates",
+    "model": "ELearningCertificate",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subChapterId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_chapters",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "certificateUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "certificatePath",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "issuedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "certificateNumber",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "displayNumber",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "verifiedBy",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "note",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_discussions",
+    "model": "ELearningDiscussion",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "courseId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_courses",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "parentId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_discussions",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "e_learning_bookmarks",
+    "model": "ELearningBookmark",
+    "module": "E-Learning",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subBabId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_sub_babs",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "feedback",
+    "model": "Feedback",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "sessionId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_sessions",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rating",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "comment",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "submittedDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isAnonymous",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isVisible",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentor_profiles",
+    "model": "MentorProfile",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "expertise",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "bio",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "experience",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "availabilitySchedule",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "hourlyRate",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isVerified",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "linkedin",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "mentor_earning_summaries",
+    "model": "MentorEarningSummary",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorProfileId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "totalEarnings",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "totalThisMonth",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "totalLastMonth",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "growthPercent",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentor_report",
+    "model": "MentorReport",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "sessionId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_sessions",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorProfileId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "understanding",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "participation",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "challenges",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "commonQuestions",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "nextFocus",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "additionalNotes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_services",
+    "model": "MentoringService",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "price",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "strikePrice",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "serviceType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "maxParticipants",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "durationDays",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "endDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "thumbnail",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "whatsappGroup",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "programAbout",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "totalWeeks",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "totalProjects",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "slug",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "isFeatured",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "difficultyOrder",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "category",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "level",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "installmentAvailable",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "maxInstallmentMonths",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "mentoring_sections",
+    "model": "MentoringSection",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "MentoringSectionType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "content",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "order",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_tools",
+    "model": "MentoringTool",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_schedules",
+    "model": "MentoringSchedule",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "date",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_portfolios",
+    "model": "MentoringPortfolio",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "menteeName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "projectLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "thumbnail",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "mentoring_testimonials",
+    "model": "MentoringTestimonial",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "role",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "comment",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rating",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_service_mentors",
+    "model": "MentoringServiceMentor",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentoringServiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorProfileId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "mentoring_sessions",
+    "model": "MentoringSession",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "date",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startTime",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "endTime",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "durationMinutes",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "meetingLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "meetingId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "passcode",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "notes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "pptLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "recordingLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "mentoring_session_mentors",
+    "model": "MentoringSessionMentor",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentoringSessionId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_sessions",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorProfileId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "notifications",
+    "model": "Notification",
+    "module": "Modul Pendukung",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "message",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deliveryMethod",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "actionUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "sentAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "meta",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "targetRole",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "notification_recipients",
+    "model": "NotificationRecipient",
+    "module": "Modul Pendukung",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "notificationId",
+        "type": "String",
+        "pk": false,
+        "fk": "notifications",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isRead",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "readAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "payments",
+    "model": "Payment",
+    "module": "Payment & Withdrawal",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "bookingInvoiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "booking_invoices",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "practicePurchaseId",
+        "type": "String",
+        "pk": false,
+        "fk": "practice_purchases",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "eLearningSubscriptionId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_subscriptions",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "ayclBookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_bookings",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "merchantOrderId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "amount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "installmentNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "dueDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reminderCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "lastReminderSentAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "paymentDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "paymentMethod",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "transactionId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_files",
+    "model": "PracticeFile",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "materialId",
+        "type": "String",
+        "pk": false,
+        "fk": "practice_materials",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "fileName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "filePath",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "fileType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "fileSize",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_materials",
+    "model": "PracticeMaterial",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "practiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "practices",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "startDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "endDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_progress",
+    "model": "PracticeProgress",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "materialId",
+        "type": "String",
+        "pk": false,
+        "fk": "practice_materials",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isCompleted",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "lastAccessed",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "timeSpentSeconds",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_purchases",
+    "model": "PracticePurchase",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "practiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "practices",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralUsageId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_usages",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "purchaseDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_reviews",
+    "model": "PracticeReview",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "practiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "practices",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rating",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "comment",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "submittedDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practice_submissions",
+    "model": "PracticeSubmission",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "practiceId",
+        "type": "String",
+        "pk": false,
+        "fk": "practices",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "notes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "files",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "submittedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reviewedById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reviewedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "kesesuaian",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "kualitas",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "kreativitas",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "kelengkapan",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "komentar",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "saran",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "perluRevisi",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "practices",
+    "model": "Practice",
+    "module": "Practice",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mentorId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentor_profiles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "thumbnailImages",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "price",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "practiceType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "category",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "tags",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "benefits",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "toolsUsed",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "challenges",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "expectedOutcomes",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "estimatedDuration",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "targetAudience",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "projects",
+    "model": "Project",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "serviceId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_services",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "project_submissions",
+    "model": "ProjectSubmission",
+    "module": "Mentoring & Booking",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "projectId",
+        "type": "String",
+        "pk": false,
+        "fk": "projects",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "menteeId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "sessionId",
+        "type": "String",
+        "pk": false,
+        "fk": "mentoring_sessions",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "filePaths",
+        "type": "String[]",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "projectLink",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "submissionDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "plagiarismScore",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "score",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "briefScore",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "technicalScore",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "creativityScore",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "completenessScore",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "mentorFeedback",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "mentorSuggestion",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isReviewed",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "reviewStatus",
+        "type": "ReviewStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isRevisedRequired",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "revisionDeadline",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "gradedBy",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "redeem_codes",
+    "model": "RedeemCode",
+    "module": "Voucher & Redeem Code",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "code",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "planId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_subscription_plans",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "maxUses",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "usedCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "expiresAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "note",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "redeem_code_usages",
+    "model": "RedeemCodeUsage",
+    "module": "Voucher & Redeem Code",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "redeemCodeId",
+        "type": "String",
+        "pk": false,
+        "fk": "redeem_codes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "subscriptionId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_subscriptions",
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "redeemedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "redeem_code_attempts",
+    "model": "RedeemCodeAttempt",
+    "module": "Voucher & Redeem Code",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "success",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "referral_commisions",
+    "model": "ReferralCommisions",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralCodeId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_codes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "transactionId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "amount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "tierAtTransaction",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "productType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "pointsAwarded",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "seasonId",
+        "type": "String",
+        "pk": false,
+        "fk": "affiliator_seasons",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "referral_codes",
+    "model": "ReferralCode",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "ownerId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "code",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "createdDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "expiryDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "referral_usages",
+    "model": "ReferralUsage",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "referralCodeId",
+        "type": "String",
+        "pk": false,
+        "fk": "referral_codes",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "usedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "context",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "roles",
+    "model": "Role",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "roleName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "short_links",
+    "model": "ShortLink",
+    "module": "Modul Pendukung",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "shortCode",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "originalUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "expiresAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "clickCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "user_activity_logs",
+    "model": "UserActivityLog",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "page",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "durationSec",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "accessedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "user_behavior",
+    "model": "UserBehavior",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "pageVisited",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "action",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "timestamp",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "ipAddress",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "userAgent",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "user_roles",
+    "model": "UserRole",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "roleId",
+        "type": "String",
+        "pk": false,
+        "fk": "roles",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "assignedDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "users",
+    "model": "User",
+    "module": "User & Role",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "email",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "passwordHash",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "googleId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "fullName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "phoneNumber",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "profilePicture",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "city",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "province",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isEmailVerified",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "verificationToken",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "verificationTokenExpires",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "registrationDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "lastLogin",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "fcmToken",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "instagram",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "twitter",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "youtube",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "tiktok",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "otherSocialMedia",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "vouchers",
+    "model": "Voucher",
+    "module": "Voucher & Redeem Code",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "code",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "discountType",
+        "type": "VoucherDiscountType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "discountValue",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "maxDiscountAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "minimumPurchase",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "productScope",
+        "type": "VoucherProductScope",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "usageLimit",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "usageLimitPerUser",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "usageCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "startDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "expiryDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "voucher_usages",
+    "model": "VoucherUsage",
+    "module": "Voucher & Redeem Code",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "voucherId",
+        "type": "String",
+        "pk": false,
+        "fk": "vouchers",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "VoucherUsageStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "originalAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "discountAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "finalAmount",
+        "type": "Decimal",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "bookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "bookings",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "practicePurchaseId",
+        "type": "String",
+        "pk": false,
+        "fk": "practice_purchases",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "eLearningSubscriptionId",
+        "type": "String",
+        "pk": false,
+        "fk": "e_learning_subscriptions",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "ayclBookingId",
+        "type": "String",
+        "pk": false,
+        "fk": "aycl_bookings",
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "usedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "withdrawal_methods",
+    "model": "WithdrawalMethod",
+    "module": "Affiliator & Referral",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "providerName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "accountNumber",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "accountName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "companies",
+    "model": "Company",
+    "module": "Job Board (Dummy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "companyName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "industry",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "companySize",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "website",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "logoUrl",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "jobs",
+    "model": "Job",
+    "module": "Job Board (Dummy)",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "companyId",
+        "type": "String",
+        "pk": false,
+        "fk": "companies",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "jobTitle",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "salaryMin",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "salaryMax",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "city",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "country",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "workType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "level",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "experienceRequired",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "requirements",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  }
+]
