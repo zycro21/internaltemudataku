@@ -22,6 +22,13 @@ mengikuti isi branch terbaru **tanpa perlu build atau deploy ulang**.
 - **Highlight relasi.** Klik sebuah tabel, maka garis relasi yang masuk dan
   keluar dari tabel itu menyala, sedangkan tabel dan garis lain diredupkan.
   Pilihan tetap bertahan saat kanvas di-drag. Klik area kosong untuk membatalkan.
+- **Dokumentasi per tabel.** Klik sebuah tabel, maka panel dokumentasi terbuka di
+  bawah kanvas: penjelasan fungsi tabel, penjelasan tiap kolom (tipe, constraint,
+  default, contoh nilai), relasi PK/FK, dan catatan penting. Isinya dibaca dari
+  `content/database-docs.md`. Nama tabel di dalam teks (mis. `users`) bisa diklik
+  untuk lompat ke tabel itu. Panel bisa ditarik untuk mengubah tingginya, ditutup
+  dengan tombol ✕ atau `Esc`. Tabel yang belum ada di dokumen tetap tampil dengan
+  struktur dari schema.
 - **Cari tabel dan filter modul** dari sidebar.
 - **Tema terang dan gelap.** Pilihan disimpan di browser. Kunjungan pertama
   mengikuti pengaturan sistem.
@@ -146,19 +153,26 @@ frontend/internaltemudataku/
 │   │   ├── page.tsx              # halaman utama "/"
 │   │   ├── globals.css           # token warna tema terang/gelap
 │   │   ├── icon.svg              # favicon
-│   │   ├── api/erd-data/route.ts # endpoint JSON
+│   │   ├── api/erd-data/route.ts   # endpoint JSON schema
+│   │   ├── api/table-docs/route.ts # endpoint JSON dokumentasi tabel
 │   │   └── erd/
 │   │       ├── page.tsx          # halaman "/erd"
 │   │       ├── ErdViewer.tsx     # komponen utama viewer
+│   │       ├── DocPanel.tsx      # panel dokumentasi di bawah kanvas
+│   │       ├── Markdown.tsx      # renderer markdown mini untuk isi dokumentasi
 │   │       ├── ThemeToggle.tsx   # tombol tema
 │   │       └── erd.module.css    # style kanvas, kotak tabel, garis relasi
 │   └── lib/erd/
 │       ├── fetch-schema.ts       # ambil schema dari GitHub + fallback
 │       ├── parse-schema.ts       # parser schema.prisma
+│       ├── parse-docs.ts         # parser content/database-docs.md
+│       ├── load-docs.ts          # baca + cache dokumentasi (per waktu ubah file)
 │       ├── erd-engine.ts         # layout + perhitungan garis relasi
 │       ├── module-map.json       # pemetaan tabel -> modul
 │       ├── erd-data.json         # snapshot cadangan
 │       └── types.ts
+├── content/
+│   └── database-docs.md          # dokumentasi tiap tabel (sumber panel dokumentasi)
 ├── public/
 ├── next.config.ts
 └── package.json
@@ -180,6 +194,31 @@ di Prisma, bukan nama model):
 Tabel yang belum terdaftar masuk ke modul **Lainnya**. Untuk modul baru,
 daftarkan juga warnanya di `MODULE_COLORS` pada `src/lib/erd/erd-engine.ts`
 (tanpa itu modul memakai warna abu-abu).
+
+### Memperbarui dokumentasi tabel
+
+Edit (atau ganti) `content/database-docs.md`. File dibaca saat request dan
+hanya di-parsing ulang kalau waktu ubahnya berubah, jadi **tidak perlu build
+atau restart**; cukup klik tabel lagi atau tekan tombol ↻ di sidebar.
+
+Parser mengenali format ini (sama dengan bagian "Cakupan & Cara Membaca Dokumen"
+di file itu):
+
+```md
+### 5.15 `nama_tabel`            <- judul; opsional "(MASIH TIDAK DIPAKAI)" jadi badge
+**Fungsi tabel**: ...            <- tab Ringkasan
+#### Kolom                       <- tabel markdown -> tab Kolom
+#### Primary Key & Foreign Key   <- tab Relasi
+#### Relasi ke Tabel Lain ...    <- tab Relasi
+#### 📌 Catatan ...              <- tab Catatan (boleh lebih dari satu)
+---                              <- penutup dokumen satu tabel
+```
+
+Yang dicocokkan ke ERD adalah nama **tabel** di judul. Kalau judul memakai nama
+lain dari tabel fisiknya, tambahkan alias di `TABLE_ALIASES` pada
+`src/lib/erd/parse-docs.ts`. Lokasi file bisa diganti lewat env `DOCS_PATH`.
+Kalau file hilang atau tidak terbaca, ERD tetap jalan dan panel menampilkan
+pesan serta struktur kolom dari schema. Cek manual: `GET /api/table-docs`.
 
 ### Memperbarui snapshot cadangan
 

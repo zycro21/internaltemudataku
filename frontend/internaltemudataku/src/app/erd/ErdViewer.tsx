@@ -7,7 +7,11 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
 } from "react";
-import type { TableDef, PositionedTable } from "@/lib/erd/types";
+import type {
+  TableDef,
+  PositionedTable,
+  TableDocsResult,
+} from "@/lib/erd/types";
 import {
   MODULE_COLORS,
   layoutTables,
@@ -17,6 +21,7 @@ import {
 } from "@/lib/erd/erd-engine";
 import styles from "./erd.module.css";
 import ThemeToggle from "./ThemeToggle";
+import DocPanel from "./DocPanel";
 
 interface Bounds {
   x: number;
@@ -44,8 +49,31 @@ export default function ErdViewer({
   const [fetchError, setFetchError] = useState(initialError);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Dokumentasi tabel (content/database-docs.md). null = masih dimuat.
+  const [docs, setDocs] = useState<TableDocsResult | null>(null);
+  // Tinggi panel dokumentasi sebagai pecahan tinggi area kanvas + panel.
+  const [docHeightFrac, setDocHeightFrac] = useState(0.4);
+
+  async function loadDocs() {
+    try {
+      const res = await fetch("/api/table-docs", { cache: "no-store" });
+      setDocs((await res.json()) as TableDocsResult);
+    } catch (err) {
+      setDocs({
+        docs: {},
+        error: `Dokumentasi tabel gagal dimuat (${err instanceof Error ? err.message : String(err)}).`,
+      });
+    }
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadDocs();
+  }, []);
+
   async function handleRefresh() {
     setRefreshing(true);
+    void loadDocs();
     try {
       const res = await fetch("/api/erd-data", { cache: "no-store" });
       const data = await res.json();
@@ -85,11 +113,11 @@ export default function ErdViewer({
   });
   const pinchState = useRef<{ dist: number | null }>({ dist: null });
 
-  function fitTo(b: Bounds, pad = 70) {
+  function fitTo(b: Bounds, pad = 70, vhOverride?: number) {
     const vp = viewportRef.current;
     if (!vp) return;
     const vw = vp.clientWidth;
-    const vh = vp.clientHeight;
+    const vh = vhOverride ?? vp.clientHeight;
     const s = Math.min((vw - pad * 2) / b.w, (vh - pad * 2) / b.h, 1.6);
     const scale = Math.max(s, 0.04);
     const tx = vw / 2 - (b.x + b.w / 2) * scale;
@@ -227,12 +255,50 @@ export default function ErdViewer({
   }, []);
 
   function selectTable(idx: number, doFit: boolean) {
+    // Panel dokumentasi muncul di bawah kanvas dan memotong tinggi kanvas.
+    // Saat panel baru akan terbuka, hitung tinggi kanvas SETELAH panel ada,
+    // supaya tabel yang dipilih tidak tertutup panel.
+    const opening = selected === null;
+    const vp = viewportRef.current;
+    const areaH = vp?.parentElement?.clientHeight;
+    const futureVh = opening && areaH ? areaH * (1 - docHeightFrac) : undefined;
     setSelected(idx);
-    if (doFit) fitTo(boundsForTable(positioned[idx]));
+    if (doFit) {
+      fitTo(boundsForTable(positioned[idx]), 70, futureVh);
+    } else if (futureVh !== undefined) {
+      const t = positioned[idx];
+      const margin = 16;
+      setTransform((prev) => {
+        const top = t.y * prev.scale + prev.ty;
+        const bottom = (t.y + t.h) * prev.scale + prev.ty;
+        if (bottom <= futureVh - margin) return prev;
+        // Geser kanvas ke atas secukupnya; jangan sampai bagian atas tabel terpotong.
+        const shift = Math.min(bottom - (futureVh - margin), top - margin);
+        return shift > 0 ? { ...prev, ty: prev.ty - shift } : prev;
+      });
+    }
+  }
+  function jumpToTableName(name: string) {
+    const t = positioned.find((p) => p.table === name);
+    if (t) selectTable(t.idx, true);
   }
   function clearSelection() {
     setSelected(null);
   }
+
+  // Esc menutup panel dokumentasi (dan membatalkan pilihan tabel).
+  useEffect(() => {
+    if (selected === null) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      const el = document.activeElement;
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)
+        return;
+      setSelected(null);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected]);
 
   // Klik di area kosong kanvas = batalkan pilihan, KECUALI klik itu hanyalah
   // ujung dari gerakan drag/pan (browser tetap mengirim event "click" setelah
@@ -391,122 +457,142 @@ export default function ErdViewer({
         </div>
       </aside>
 
-      {/* Canvas */}
-      <div
-        ref={viewportRef}
-        className={styles.viewport + (isPanning ? " " + styles.panning : "")}
-        onClick={handleCanvasClick}
-      >
+      {/* Kanvas + panel dokumentasi (di bawah kanvas) */}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <div
-          className={styles.world}
-          style={{
-            transform: `translate(${transform.tx}px,${transform.ty}px) scale(${transform.scale})`,
-          }}
+          ref={viewportRef}
+          className={styles.viewport + (isPanning ? " " + styles.panning : "")}
           onClick={handleCanvasClick}
         >
-          <svg
-            className={styles.relLayer}
-            width={worldW}
-            height={worldH}
+          <div
+            className={styles.world}
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              overflow: "visible",
-              pointerEvents: "none",
+              transform: `translate(${transform.tx}px,${transform.ty}px) scale(${transform.scale})`,
             }}
+            onClick={handleCanvasClick}
           >
-            {relations.map((r, i) => {
-              const rel =
-                selected !== null &&
-                (r.srcIdx === selected || r.dstIdx === selected);
-              const dimmed = selected !== null && !rel;
-              return (
-                <path
-                  key={i}
-                  d={r.path}
-                  className={rel ? styles.hl : dimmed ? styles.dim : undefined}
-                />
-              );
-            })}
-          </svg>
-
-          {moduleEntries.map(([mod, b]) => (
-            <div
-              key={mod}
-              className={styles.modbg}
+            <svg
+              className={styles.relLayer}
+              width={worldW}
+              height={worldH}
               style={{
-                left: b.x,
-                top: b.y,
-                width: b.w,
-                height: b.h,
-                borderColor: b.color + "55",
-                background: b.color + "0c",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                overflow: "visible",
+                pointerEvents: "none",
               }}
             >
-              <span className={styles.modlabel} style={{ color: b.color }}>
-                {mod} <span className={styles.modcount}>({b.count})</span>
-              </span>
-            </div>
-          ))}
+              {relations.map((r, i) => {
+                const rel =
+                  selected !== null &&
+                  (r.srcIdx === selected || r.dstIdx === selected);
+                const dimmed = selected !== null && !rel;
+                return (
+                  <path
+                    key={i}
+                    d={r.path}
+                    className={
+                      rel ? styles.hl : dimmed ? styles.dim : undefined
+                    }
+                  />
+                );
+              })}
+            </svg>
 
-          {positioned.map((t) => (
-            <TableBox
-              key={t.table}
-              t={t}
-              dim={relatedSet !== null && !relatedSet.has(t.idx)}
-              hl={selected === t.idx}
+            {moduleEntries.map(([mod, b]) => (
+              <div
+                key={mod}
+                className={styles.modbg}
+                style={{
+                  left: b.x,
+                  top: b.y,
+                  width: b.w,
+                  height: b.h,
+                  borderColor: b.color + "55",
+                  background: b.color + "0c",
+                }}
+              >
+                <span className={styles.modlabel} style={{ color: b.color }}>
+                  {mod} <span className={styles.modcount}>({b.count})</span>
+                </span>
+              </div>
+            ))}
+
+            {positioned.map((t) => (
+              <TableBox
+                key={t.table}
+                t={t}
+                dim={relatedSet !== null && !relatedSet.has(t.idx)}
+                hl={selected === t.idx}
+                onClick={() => {
+                  if (panState.current.moved) return;
+                  selectTable(t.idx, false);
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="pointer-events-none absolute right-4 top-4 z-10 max-w-[230px] rounded-lg border border-erd-border bg-erd-panel px-3 py-2 text-[11px] leading-relaxed text-erd-faint">
+            🔑 = Primary Key &middot; 🔗 = Foreign Key &middot; scroll untuk
+            zoom, Drag untuk geser, Klik tabel untuk highlight relasi dan buka
+            dokumentasinya di bawah.
+          </div>
+          <div className="absolute bottom-4 left-4 z-10 rounded-lg border border-erd-border bg-erd-panel px-2.5 py-1.5 font-mono text-[11px] text-erd-faint">
+            {Math.round(transform.scale * 100)}%
+          </div>
+          <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5">
+            <button
+              onClick={() =>
+                setTransform((p) => ({
+                  ...p,
+                  scale: Math.min(3, p.scale * 1.25),
+                }))
+              }
+              title="Zoom in"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
+            >
+              +
+            </button>
+            <button
+              onClick={() =>
+                setTransform((p) => ({
+                  ...p,
+                  scale: Math.max(0.03, p.scale * 0.8),
+                }))
+              }
+              title="Zoom out"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
+            >
+              &minus;
+            </button>
+            <button
               onClick={() => {
-                if (panState.current.moved) return;
-                selectTable(t.idx, false);
+                setActiveModule(null);
+                fitTo({ x: -20, y: -20, w: worldW + 40, h: worldH + 40 });
               }}
-            />
-          ))}
+              title="Fit semua"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
+            >
+              &#9723;
+            </button>
+          </div>
         </div>
 
-        <div className="pointer-events-none absolute right-4 top-4 z-10 max-w-[230px] rounded-lg border border-erd-border bg-erd-panel px-3 py-2 text-[11px] leading-relaxed text-erd-faint">
-          🔑 = Primary Key &middot; 🔗 = Foreign Key &middot; scroll untuk zoom,
-          Drag untuk geser, Klik tabel untuk highlight relasi.
-        </div>
-        <div className="absolute bottom-4 left-4 z-10 rounded-lg border border-erd-border bg-erd-panel px-2.5 py-1.5 font-mono text-[11px] text-erd-faint">
-          {Math.round(transform.scale * 100)}%
-        </div>
-        <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5">
-          <button
-            onClick={() =>
-              setTransform((p) => ({
-                ...p,
-                scale: Math.min(3, p.scale * 1.25),
-              }))
-            }
-            title="Zoom in"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
-          >
-            +
-          </button>
-          <button
-            onClick={() =>
-              setTransform((p) => ({
-                ...p,
-                scale: Math.max(0.03, p.scale * 0.8),
-              }))
-            }
-            title="Zoom out"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
-          >
-            &minus;
-          </button>
-          <button
-            onClick={() => {
-              setActiveModule(null);
-              fitTo({ x: -20, y: -20, w: worldW + 40, h: worldH + 40 });
-            }}
-            title="Fit semua"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-erd-border bg-erd-panel text-base text-erd-text hover:border-erd-accent hover:text-erd-accent"
-          >
-            &#9723;
-          </button>
-        </div>
+        {selected !== null && (
+          <DocPanel
+            table={positioned[selected]}
+            color={MODULE_COLORS[positioned[selected].module] || "#888"}
+            docs={docs}
+            related={related ?? { out: [], in: [] }}
+            positioned={positioned}
+            heightFrac={docHeightFrac}
+            onHeightChange={setDocHeightFrac}
+            onJumpTable={jumpToTableName}
+            onJumpIndex={(idx) => selectTable(idx, true)}
+            onClose={clearSelection}
+          />
+        )}
       </div>
     </div>
   );
