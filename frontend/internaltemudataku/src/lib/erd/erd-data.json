@@ -5235,6 +5235,862 @@
     ]
   },
   {
+    "table": "forms",
+    "model": "Form",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "FormType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "FormStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "slug",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": false
+      },
+      {
+        "name": "eventId",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "eventNameSnapshot",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "showOnEventPage",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "acceptingResponses",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "responseLimitEnabled",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "responseLimit",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "periodEnabled",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "openAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "closeAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "submittedResponseCount",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "responderAccess",
+        "type": "FormResponderAccess",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "collectEmail",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "limitOneResponsePerAccount",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "allowEditResponse",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "sendResponseReceipt",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "allowResponderDraft",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "shuffleQuestionOrder",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "notifyOnNewResponse",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "confirmationMessage",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "closedMessage",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "headerImage",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "themeColor",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "backgroundColor",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "fontPreset",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "publishedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "archivedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_sections",
+    "model": "FormSection",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "formId",
+        "type": "String",
+        "pk": false,
+        "fk": "forms",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "nextAction",
+        "type": "FormNavigationAction",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "nextSectionId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_sections",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deletedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_items",
+    "model": "FormItem",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "formId",
+        "type": "String",
+        "pk": false,
+        "fk": "forms",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "sectionId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_sections",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "FormItemType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "isRequired",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "shuffleOptions",
+        "type": "Boolean",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "validation",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "config",
+        "type": "Json",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deletedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_options",
+    "model": "FormOption",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "itemId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_items",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "kind",
+        "type": "FormOptionKind",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "label",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "orderNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "branchAction",
+        "type": "FormNavigationAction",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "branchSectionId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_sections",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "deletedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_responses",
+    "model": "FormResponse",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "formId",
+        "type": "String",
+        "pk": false,
+        "fk": "forms",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "userId",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "respondentEmail",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "FormResponseStatus",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "submittedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "editToken",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": true,
+        "nullable": true
+      },
+      {
+        "name": "idempotencyKey",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_answers",
+    "model": "FormAnswer",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "responseId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_responses",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "itemId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_items",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "itemTypeSnapshot",
+        "type": "FormItemType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "itemTitleSnapshot",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "valueText",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "valueNumber",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "valueDate",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "form_answer_selections",
+    "model": "FormAnswerSelection",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "answerId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_answers",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "optionId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_options",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rowOptionId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_options",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "optionLabelSnapshot",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "rowLabelSnapshot",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      }
+    ]
+  },
+  {
+    "table": "form_answer_files",
+    "model": "FormAnswerFile",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "answerId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_answers",
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "originalName",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "storagePath",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "mimeType",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "sizeBytes",
+        "type": "Int",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
     "table": "mentor_profiles",
     "model": "MentorProfile",
     "module": "Mentoring & Booking",
