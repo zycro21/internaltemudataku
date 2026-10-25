@@ -26,11 +26,13 @@ mencakup seluruh domain bisnis aplikasi, di antaranya:
 - **Voucher & Redeem Code** - kode promo dan kode redeem akses gratis.
 - **Payment & Withdrawal** - transaksi pembayaran dan penarikan dana.
 - **Practice** - modul latihan mandiri (materi, submission, review).
+- **Form** - form builder (mirip Google Forms): section, pertanyaan,
+  branching antar-section, dan response/jawaban responder.
 - Serta modul pendukung lain: notifikasi, feedback, sertifikat, export log,
   dan lain-lain.
 
-Per catatan terakhir, skema ini terdiri dari **123 model (tabel)** dan
-**23 enum**, dikelola dalam satu file `schema.prisma`.
+Per catatan terakhir, skema ini terdiri dari **134 model (tabel)** dan
+**31 enum**, dikelola dalam satu file `schema.prisma`.
 
 ## 3. Cakupan & Cara Membaca Dokumen Ini
 
@@ -77,6 +79,7 @@ selanjutnya dari dokumen ini.)*
 - [x] Voucher & Redeem Code
 - [x] Payment & Withdrawal
 - [x] Practice
+- [x] Form (lihat 5.117a-5.117h)
 - [x] Modul Pendukung (Notifikasi, Feedback, Sertifikat, dll)
 - [x] Job Board (Dummy - lihat 5.122-5.123)
 
@@ -164,6 +167,7 @@ detail satu per satu di bagian selanjutnya):
 | Voucher | `Voucher` (sbg pembuat), `VoucherUsage` |
 | Redeem Code | `RedeemCode` (sbg pembuat), `RedeemCodeUsage`, `RedeemCodeAttempt` |
 | Article | `Article`, `ArticleElementFavorite`, `ArticleLike`, `ArticleComment`, `ArticleCommentLike` |
+| Form | `Form` (sbg pembuat), `FormResponse` (sbg responder, nullable - bisa anonim) |
 
 ---
 
@@ -4227,6 +4231,462 @@ enum baru (`ArticleStatus`, `ArticleContentBlockType`,
 `ArticleElementType`). Enum `AnchorPosition` dan `MediaType` dipakai ulang
 dari modul E-Learning (5.47 & 5.52), tidak didefinisikan ulang di sini.)*
 
+## Modul: Form
+
+> ℹ️ **Catatan pola untuk seluruh modul ini**: Modul Form adalah *form
+> builder* (mirip Google Forms) - pembuat form menyusun `Form` → dibagi
+> jadi beberapa `FormSection` (halaman) → tiap section berisi `FormItem`
+> (pertanyaan **atau** elemen konten seperti judul/gambar/video) → item
+> bertipe pilihan punya `FormOption`. Di sisi responder, satu kali
+> pengisian = satu `FormResponse`, berisi satu `FormAnswer` per item, dan
+> jawaban bertipe pilihan/file disimpan di `FormAnswerSelection` /
+> `FormAnswerFile`.
+>
+> Beberapa pola di modul ini **berbeda** dari mayoritas tabel lain di skema:
+>
+> - **Semua kolom multi-kata di-`@map` ke snake_case** (`event_id`,
+>   `order_number`, dst.), dan **semua `updatedAt` pakai `@updatedAt`**
+>   (otomatis ter-update Prisma) - kebalikan dari mayoritas tabel lain yang
+>   `updatedAt`-nya manual.
+> - **Soft delete** (`deletedAt`) dipakai di `form_sections`, `form_items`,
+>   dan `form_options`, bukan hard delete. Alasannya: `form_answers` dan
+>   `form_answer_selections` menunjuk balik ke item/option dengan
+>   `onDelete: Restrict`, jadi baris yang sudah pernah dijawab **tidak bisa
+>   dihapus permanen** - harus ditandai `deletedAt` supaya response lama
+>   tetap valid.
+> - **Snapshot** judul/label disimpan di tabel jawaban
+>   (`itemTitleSnapshot`, `optionLabelSnapshot`, dst.), supaya response lama
+>   terbaca persis seperti saat dikirim walau pertanyaan/pilihannya diedit
+>   kemudian (pola audit yang sama dengan `referral_commisions`, 5.89).
+> - Status & tipe memakai **enum sungguhan** (7 enum, lihat di bawah),
+>   bukan `String` freetext seperti di banyak modul lain.
+> - Modul `Event` **belum ada** di skema. `forms.eventId` cuma kolom
+>   `String` biasa, **bukan FK** - ada komentar `TODO` di skema untuk
+>   menambahkan relasinya setelah model `Event` dibuat.
+
+### Enum Modul Form
+
+| Enum | Nilai | Keterangan |
+|---|---|---|
+| `FormType` | `EVENT` | Form Event: terkait ke Event non-kelas, bisa tampil di halaman Event. |
+| | `NON_EVENT` | Form Non Event: tidak terkait Event, diakses lewat direct link. |
+| `FormStatus` | `DRAFT` | Juga dipakai saat Unpublish (konfigurasi & response tetap aman). |
+| | `PUBLISHED` | Form tayang. |
+| | `ARCHIVED` | Form diarsipkan. |
+| `FormResponderAccess` | `ANYONE_WITH_LINK` | Siapa pun yang punya link bisa mengisi (responder boleh anonim). |
+| | `LOGIN_REQUIRED` | Responder wajib login. |
+| `FormNavigationAction` | `NEXT` | Lanjut ke section berikutnya (urutan normal). |
+| | `GO_TO_SECTION` | Lompat ke section tertentu. |
+| | `SUBMIT` | Langsung akhiri form. |
+| `FormItemType` | `SHORT_ANSWER`, `PARAGRAPH`, `MULTIPLE_CHOICE`, `CHECKBOXES`, `DROPDOWN`, `FILE_UPLOAD`, `LINEAR_SCALE`, `RATING`, `MULTIPLE_CHOICE_GRID`, `CHECKBOX_GRID`, `DATE`, `TIME_DURATION` | **Pertanyaan** (punya jawaban) - 12 tipe. |
+| | `TITLE_DESCRIPTION`, `IMAGE`, `VIDEO` | **Elemen konten** (tidak punya jawaban) - 3 tipe. |
+| `FormOptionKind` | `CHOICE` | Pilihan biasa (Multiple Choice, Checkboxes, Dropdown). |
+| | `GRID_ROW` | Baris pada grid. |
+| | `GRID_COLUMN` | Kolom pada grid. |
+| `FormResponseStatus` | `DRAFT` | Autosave responder, **belum** dihitung sebagai submission final. |
+| | `SUBMITTED` | Sudah dikirim (submission final). |
+
+`FormNavigationAction` dipakai di dua tempat: navigasi akhir section
+(`form_sections.nextAction`) dan branching per option
+(`form_options.branchAction`).
+
+### 5.117a `forms`
+
+**Fungsi tabel**: Master data satu form - induk dari seluruh section,
+item, dan response di modul ini. Menyimpan konfigurasi dasar, aturan
+penerimaan response, pengaturan responder, dan tampilan/tema form.
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf1a2b3c4d5e6f708192a3b` | ID unik form. |
+| `type` | Enum `FormType` | `NOT NULL` | - | `NON_EVENT` | `EVENT` atau `NON_EVENT`. Sesuai komentar developer: **dikunci setelah dibuat (V1)** - tidak boleh diubah belakangan. |
+| `status` | Enum `FormStatus` | `NOT NULL` | `DRAFT` | `PUBLISHED` | `DRAFT`, `PUBLISHED`, atau `ARCHIVED`. `DRAFT` juga dipakai saat unpublish. |
+| `title` | VarChar | `NOT NULL` | - | `Pendaftaran Webinar Data Science` | Judul form. |
+| `description` | Text | `nullable` | - | `Isi form ini untuk mendaftar webinar.` | Deskripsi form. |
+| `slug` | VarChar | `NOT NULL`, `@unique` | - | `k3x9q2mf7a` | Dipakai di URL responder (`/form/{slug}`). Sesuai komentar developer: **random, bukan dari judul**, supaya link yang sudah dibagikan tidak rusak kalau judul diedit. |
+| `eventId` | String | `nullable` | - | `event-20261020-ab12cd` | ID Event terkait (khusus `type = EVENT`). ⚠️ **Bukan FK sungguhan** - model `Event` belum ada, lihat catatan modul. Kolom fisik: `event_id`. |
+| `eventNameSnapshot` | VarChar | `nullable` | - | `Webinar Data Science 2026` | Nama Event saat dikaitkan, buat info kalau Event-nya dihapus. Kolom fisik: `event_name_snapshot`. |
+| `showOnEventPage` | Boolean | `NOT NULL` | `true` | `true` | Tampil/tidaknya form di halaman Event - terpisah dari status Publish, dan hanya berlaku untuk `type = EVENT` (sesuai komentar developer). Kolom fisik: `show_on_event_page`. |
+| `acceptingResponses` | Boolean | `NOT NULL` | `true` | `true` | Switch manual penerimaan response - **beda dari `status`** (form bisa `PUBLISHED` tapi tidak menerima response). Kolom fisik: `accepting_responses`. |
+| `responseLimitEnabled` | Boolean | `NOT NULL` | `false` | `true` | `true` = batas jumlah response aktif (nilainya di `responseLimit`). |
+| `responseLimit` | Int | `nullable` | - | `100` | Batas maksimal response final. Relevan kalau `responseLimitEnabled = true`. |
+| `periodEnabled` | Boolean | `NOT NULL` | `false` | `true` | `true` = form hanya menerima response dalam rentang `openAt`-`closeAt`. |
+| `openAt` | Timestamp(6) | `nullable` | - | `2026-11-01T00:00:00Z` | Waktu form mulai menerima response. |
+| `closeAt` | Timestamp(6) | `nullable` | - | `2026-11-30T23:59:59Z` | Waktu form berhenti menerima response. |
+| `submittedResponseCount` | Int | `NOT NULL` | `0` | `42` | Counter submission **final** (status `SUBMITTED`), dipakai untuk cek limit secara atomic (sesuai komentar developer). Kolom fisik: `submitted_response_count`. |
+| `responderAccess` | Enum `FormResponderAccess` | `NOT NULL` | `ANYONE_WITH_LINK` | `LOGIN_REQUIRED` | `ANYONE_WITH_LINK` atau `LOGIN_REQUIRED`. |
+| `collectEmail` | Boolean | `NOT NULL` | `false` | `true` | `true` = form meminta email responder. |
+| `limitOneResponsePerAccount` | Boolean | `NOT NULL` | `false` | `true` | `true` = satu akun cuma boleh submit sekali. |
+| `allowEditResponse` | Boolean | `NOT NULL` | `false` | `false` | `true` = responder boleh mengedit response setelah submit. |
+| `sendResponseReceipt` | Boolean | `NOT NULL` | `false` | `false` | `true` = responder dikirimi bukti/receipt response. |
+| `allowResponderDraft` | Boolean | `NOT NULL` | `false` | `false` | `true` = responder boleh menyimpan draft (autosave) - lihat `form_responses.status`. |
+| `shuffleQuestionOrder` | Boolean | `NOT NULL` | `false` | `false` | `true` = urutan pertanyaan diacak. |
+| `notifyOnNewResponse` | Boolean | `NOT NULL` | `false` | `true` | `true` = pembuat dinotifikasi tiap ada response baru. |
+| `confirmationMessage` | Text | `nullable` | - | `Terima kasih, response kamu sudah kami terima.` | Pesan yang tampil setelah submit. |
+| `closedMessage` | Text | `nullable` | - | `Form ini sudah ditutup.` | Pesan yang tampil kalau form tidak menerima response. |
+| `headerImage` | VarChar | `nullable` | - | `/images/forms/header-webinar.jpg` | Gambar header form. |
+| `themeColor` | VarChar | `nullable` | - | `#10B981` | Warna tema (hex). |
+| `backgroundColor` | VarChar | `nullable` | - | `#F3F4F6` | Warna latar (hex). |
+| `fontPreset` | VarChar | `nullable` | - | `inter` | Key preset font dari sistem. |
+| `publishedAt` | Timestamp(6) | `nullable` | - | `2026-10-20T09:00:00Z` | Waktu form dipublish. |
+| `archivedAt` | Timestamp(6) | `nullable` | - | `2026-12-01T00:00:00Z` | Waktu form diarsipkan. |
+| `createdById` | String | `nullable`, 🔗 FK | - | `000001` | User pembuat form. Kolom fisik: `created_by_id`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt` - otomatis. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK**: `createdById` → `users.id`, opsional - `onDelete: SetNull` (form tetap ada walau pembuatnya dihapus), `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([type, status])`, `@@index([eventId])`, `@@index([createdById])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`sections` (→ `form_sections`), `items` (→ `form_items`), `responses` (→
+`form_responses`).
+
+#### 📌 Catatan
+
+Ada **dua mekanisme terpisah** yang menentukan apakah form bisa diisi:
+`status` (`PUBLISHED`/`DRAFT`/`ARCHIVED` - tayang atau tidak) dan
+`acceptingResponses` + `periodEnabled`/`openAt`/`closeAt` +
+`responseLimitEnabled`/`responseLimit` (menerima response atau tidak).
+Keduanya independen - form bisa `PUBLISHED` tapi sudah tidak menerima
+response karena kuota habis atau periode berakhir. `submittedResponseCount`
+sengaja disimpan sebagai counter (bukan dihitung ulang dari
+`form_responses`) supaya pengecekan limit bisa atomic.
+
+---
+
+### 5.117b `form_sections`
+
+**Fungsi tabel**: Satu section (halaman/bagian) di dalam form. Setiap form
+minimal punya 1 section - dibuat otomatis bareng form-nya (sesuai komentar
+developer), jadi `form_items.sectionId` selalu terisi. Section juga
+menentukan navigasi setelah selesai (lanjut/lompat/submit).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf2b3c4d5e6f708192a3b4c` | ID unik section. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form induk. Kolom fisik: `form_id`. |
+| `title` | VarChar | `nullable` | - | `Data Diri` | Judul section. |
+| `description` | Text | `nullable` | - | `Isi data diri kamu dengan benar.` | Deskripsi section. |
+| `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan section dalam form. Kolom fisik: `order_number`. |
+| `nextAction` | Enum `FormNavigationAction` | `NOT NULL` | `NEXT` | `GO_TO_SECTION` | Navigasi setelah section ini selesai: `NEXT`, `GO_TO_SECTION`, atau `SUBMIT`. Kolom fisik: `next_action`. |
+| `nextSectionId` | String | `nullable`, 🔗 FK | - | `clf3c4d5e6f708192a3b4c5d` | Section tujuan - diisi kalau `nextAction = GO_TO_SECTION`. Self-relation. Kolom fisik: `next_section_id`. |
+| `deletedAt` | Timestamp(6) | `nullable` | - | `null` (belum dihapus) | **Soft delete.** Kolom fisik: `deleted_at`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `formId` → `forms.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `nextSectionId` → `form_sections.id` (self-relation `"FormSectionNext"`), opsional - `onDelete: SetNull`, `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([formId, orderNumber])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`previousSections` (→ self, section-section yang menunjuk ke section ini
+lewat `nextSectionId`), `items` (→ `form_items`), `branchingOptions` (→
+`form_options`, relasi `"FormOptionBranch"` - option yang branching-nya
+melompat ke section ini).
+
+#### 📌 Catatan
+
+`@@index([formId, orderNumber])` cuma **index biasa, bukan unique** - jadi
+secara skema tidak ada yang mencegah dua section dalam form yang sama punya
+`orderNumber` identik (beda dari `ct_article_table_rows` dkk. yang pakai
+`@@unique`). Konsistensi urutan dijaga di level aplikasi.
+
+---
+
+### 5.117c `form_items`
+
+**Fungsi tabel**: Satu item di dalam section - bisa berupa **pertanyaan**
+(12 tipe) maupun **elemen konten** (judul/deskripsi, gambar, video) di satu
+tabel yang sama, supaya urutannya satu daftar dan reorder cukup mengubah
+`orderNumber` (sesuai komentar developer).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf4d5e6f708192a3b4c5d6e` | ID unik item. Sesuai komentar developer: **stabil** - jangan pernah di-recreate saat label diedit. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form induk. **Redundan** dengan `section.formId` - sengaja, supaya query "semua item satu form" cukup satu query. Kolom fisik: `form_id`. |
+| `sectionId` | String | `NOT NULL`, 🔗 FK | - | `clf2b3c4d5e6f708192a3b4c` | Section tempat item berada. Kolom fisik: `section_id`. |
+| `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan item dalam section. Kolom fisik: `order_number`. |
+| `type` | Enum `FormItemType` | `NOT NULL` | - | `MULTIPLE_CHOICE` | Tipe item - 15 nilai, lihat tabel enum di atas. |
+| `title` | Text | `nullable` | - | `Dari mana kamu tahu webinar ini?` | Label pertanyaan / judul blok. `null` untuk `IMAGE`/`VIDEO`. |
+| `description` | Text | `nullable` | - | `Pilih salah satu.` | Deskripsi/petunjuk item. |
+| `isRequired` | Boolean | `NOT NULL` | `false` | `true` | `true` = wajib dijawab. Kolom fisik: `is_required`. |
+| `shuffleOptions` | Boolean | `NOT NULL` | `false` | `false` | `true` = urutan pilihan jawaban diacak. Kolom fisik: `shuffle_options`. |
+| `validation` | JsonB | `nullable` | - | `{"kind":"length","op":"max","value":100,"message":"Maksimal 100 karakter"}` | Aturan validasi per tipe + custom error message. Bentuknya bervariasi per `kind` - lihat catatan. |
+| `config` | JsonB | `nullable` | - | `{"min":1,"max":5,"minLabel":"Buruk","maxLabel":"Bagus"}` | Konfigurasi khusus tipe. Bentuknya bervariasi per `type` - lihat catatan. |
+| `deletedAt` | Timestamp(6) | `nullable` | - | `null` (belum dihapus) | **Soft delete** - supaya response lama tetap valid. Kolom fisik: `deleted_at`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `formId` → `forms.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `sectionId` → `form_sections.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([formId])`, `@@index([sectionId, orderNumber])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`options` (→ `form_options`), `answers` (→ `form_answers`).
+
+#### 📌 Catatan
+
+Dua kolom `JsonB` di tabel ini strukturnya **tidak seragam** dan hanya
+terdokumentasi lewat komentar developer di skema - kode yang membacanya
+wajib cek `type`/`kind` dulu. Contoh dari komentar developer:
+
+| Kolom | Konteks | Contoh isi |
+|---|---|---|
+| `validation` | angka | `{"kind":"number","op":"between","min":1,"max":10,"message":"..."}` |
+| `validation` | panjang teks | `{"kind":"length","op":"max","value":100,"message":"..."}` |
+| `validation` | regex | `{"kind":"regex","value":"^[0-9]+$","message":"..."}` |
+| `validation` | jumlah pilihan (Checkboxes) | `{"kind":"selectCount","op":"atLeast\|atMost\|exactly","value":2,"message":"..."}` |
+| `config` | `LINEAR_SCALE` | `{"min":1,"max":5,"minLabel":"Buruk","maxLabel":"Bagus"}` |
+| `config` | `RATING` | `{"max":5}` |
+| `config` | `FILE_UPLOAD` | `{"maxFiles":1,"maxSizeMb":10,"allowedTypes":["pdf","image"]}` |
+| `config` | `DATE` | `{"includeYear":true}` |
+| `config` | `TIME_DURATION` | `{"mode":"time"\|"duration"}` |
+| `config` | grid (`MULTIPLE_CHOICE_GRID`/`CHECKBOX_GRID`) | `{"requireEachRow":true,"oneResponsePerColumn":false}` |
+| `config` | `IMAGE`/`VIDEO` | `{"url":"...","caption":"...","widthPercent":100}` |
+
+Berbeda dari `ct_e_learning_image_video_contents`/`ct_article_image_video_contents`
+yang punya kolom `url`/`caption`/`widthPercent` sendiri, elemen `IMAGE`/`VIDEO`
+di form menyimpan datanya di dalam `config` (JSON), bukan di kolom terpisah.
+
+---
+
+### 5.117d `form_options`
+
+**Fungsi tabel**: Pilihan jawaban sekaligus baris/kolom grid milik satu
+item - dibedakan lewat kolom `kind`. Juga membawa aturan **branching**
+(lompat ke section tertentu bergantung pilihan yang dipilih responder).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf5e6f708192a3b4c5d6e7f` | ID unik option. |
+| `itemId` | String | `NOT NULL`, 🔗 FK | - | `clf4d5e6f708192a3b4c5d6e` | Item induk. Kolom fisik: `item_id`. |
+| `kind` | Enum `FormOptionKind` | `NOT NULL` | `CHOICE` | `GRID_ROW` | `CHOICE` (pilihan biasa), `GRID_ROW` (baris grid), atau `GRID_COLUMN` (kolom grid). |
+| `label` | VarChar | `NOT NULL` | - | `Instagram` | Teks pilihan / label baris / label kolom. |
+| `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan tampil. Kolom fisik: `order_number`. |
+| `branchAction` | Enum `FormNavigationAction` | `NOT NULL` | `NEXT` | `GO_TO_SECTION` | Aksi navigasi kalau option ini dipilih: `NEXT`, `GO_TO_SECTION`, atau `SUBMIT`. Kolom fisik: `branch_action`. |
+| `branchSectionId` | String | `nullable`, 🔗 FK | - | `clf3c4d5e6f708192a3b4c5d` | Section tujuan - diisi kalau `branchAction = GO_TO_SECTION`. Kolom fisik: `branch_section_id`. |
+| `deletedAt` | Timestamp(6) | `nullable` | - | `null` (belum dihapus) | **Soft delete.** Kolom fisik: `deleted_at`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `itemId` → `form_items.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `branchSectionId` → `form_sections.id` (relasi `"FormOptionBranch"`), opsional - `onDelete: SetNull`, `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([itemId, orderNumber])`, `@@index([branchSectionId])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`selections` (→ `form_answer_selections`, relasi `"SelectionOption"`),
+`rowSelections` (→ `form_answer_selections`, relasi `"SelectionRow"`).
+
+#### 📌 Catatan
+
+Sesuai komentar developer, **branching hanya dipakai untuk
+`MULTIPLE_CHOICE` dan `DROPDOWN`** - tapi pembatasan ini tidak ditegakkan
+skema; `branchAction`/`branchSectionId` ada di semua baris `form_options`
+(default `NEXT`), termasuk baris `GRID_ROW`/`GRID_COLUMN` yang tidak
+semestinya memakainya. Untuk item grid, baris dan kolomnya sama-sama
+disimpan di tabel ini (dua `kind` berbeda), bukan di dua tabel terpisah.
+
+---
+
+### 5.117e `form_responses`
+
+**Fungsi tabel**: Satu baris = satu submission responder (atau satu draft
+autosave). **Preview form tidak menyimpan apa pun** ke tabel ini (sesuai
+komentar developer).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf6f708192a3b4c5d6e7f80` | ID unik response. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form yang diisi. Kolom fisik: `form_id`. |
+| `userId` | String | `nullable`, 🔗 FK | - | `000016` | Responder - **`null` kalau anonim** (`responderAccess = ANYONE_WITH_LINK`). Kolom fisik: `user_id`. |
+| `respondentEmail` | VarChar | `nullable` | - | `budi.santoso@email.com` | Email responder (relevan kalau `forms.collectEmail = true`). Kolom fisik: `respondent_email`. |
+| `status` | Enum `FormResponseStatus` | `NOT NULL` | `DRAFT` | `SUBMITTED` | `DRAFT` (autosave, **belum** dihitung submission final) atau `SUBMITTED`. |
+| `submittedAt` | Timestamp(6) | `nullable` | - | `2026-10-21T14:05:00Z` | Waktu submit final. Kolom fisik: `submitted_at`. |
+| `editToken` | VarChar | `nullable`, `@unique` | - | `e8b1f0c2a97d4e3b` | Token akses edit response untuk responder anonim (dikirim lewat link/receipt). Kolom fisik: `edit_token`. |
+| `idempotencyKey` | VarChar | `nullable` | - | `idem-9f3a2c71` | Dikirim client per percobaan submit; retry dengan key sama tidak bikin duplikat. Kolom fisik: `idempotency_key`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-21T14:00:00Z` | Waktu baris dibuat. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-21T14:05:00Z` | Pakai `@updatedAt`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `formId` → `forms.id` - **`onDelete: Restrict`**, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `userId` → `users.id`, opsional - `onDelete: SetNull`, `onUpdate: Cascade`.
+- **Constraint tambahan**: `@@unique([formId, idempotencyKey])`.
+- **Index tambahan**: `@@index([formId, status, submittedAt])`, `@@index([userId])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`answers` (→ `form_answers`).
+
+#### 📌 Catatan
+
+`formId` pakai `onDelete: Restrict` (sesuai komentar developer) - **form
+yang sudah punya response tidak bisa dihapus permanen**. Ini kontras
+dengan `form_sections`/`form_items` yang `Cascade` dari `forms`: form
+yang belum pernah dijawab bisa dihapus bersih beserta seluruh
+section/item/option-nya, tapi begitu ada satu saja response, penghapusan
+permanen ditolak database (gunakan `status = ARCHIVED`).
+
+`userId` pakai `SetNull`, jadi kalau akun responder dihapus, response-nya
+tetap ada dan berubah jadi anonim.
+
+`@@unique([formId, idempotencyKey])` tidak membatasi baris yang
+`idempotencyKey`-nya `NULL` (PostgreSQL menganggap tiap `NULL` berbeda),
+jadi pencegahan duplikasi hanya berlaku kalau client benar-benar
+mengirim key.
+
+---
+
+### 5.117f `form_answers`
+
+**Fungsi tabel**: Jawaban untuk satu item dalam satu response - satu baris
+per pasangan (response, item). Menyimpan **snapshot** judul & tipe item
+supaya response lama tetap terbaca persis seperti saat dikirim walau item
+diedit kemudian.
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf708192a3b4c5d6e7f8091` | ID unik jawaban. |
+| `responseId` | String | `NOT NULL`, 🔗 FK | - | `clf6f708192a3b4c5d6e7f80` | Response induk. Kolom fisik: `response_id`. |
+| `itemId` | String | `NOT NULL`, 🔗 FK | - | `clf4d5e6f708192a3b4c5d6e` | Item yang dijawab. Kolom fisik: `item_id`. |
+| `itemTypeSnapshot` | Enum `FormItemType` | `NOT NULL` | - | `SHORT_ANSWER` | Snapshot tipe item saat dijawab. Kolom fisik: `item_type_snapshot`. |
+| `itemTitleSnapshot` | Text | `nullable` | - | `Siapa nama lengkap kamu?` | Snapshot judul/label item saat dijawab. Kolom fisik: `item_title_snapshot`. |
+| `valueText` | Text | `nullable` | - | `Budi Santoso` | Jawaban teks: short answer, paragraph, atau time/duration (format `"HH:mm:ss"`, sesuai komentar developer). Kolom fisik: `value_text`. |
+| `valueNumber` | Int | `nullable` | - | `4` | Jawaban angka: linear scale atau rating. Kolom fisik: `value_number`. |
+| `valueDate` | Date | `nullable` | - | `2026-10-21` | Jawaban tanggal (tipe `DATE`, tanpa jam). Kolom fisik: `value_date`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `responseId` → `form_responses.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `itemId` → `form_items.id` - **`onDelete: Restrict`**, `onUpdate: Cascade`.
+- **Constraint tambahan**: `@@unique([responseId, itemId])`.
+- **Index tambahan**: `@@index([itemId])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`selections` (→ `form_answer_selections`), `files` (→ `form_answer_files`).
+
+#### 📌 Catatan
+
+Tiga kolom `value*` bersifat **saling melengkapi per tipe item** - hanya
+yang sesuai tipenya yang terisi, sisanya `NULL`. Jawaban bertipe pilihan
+(Multiple Choice, Checkboxes, Dropdown, Grid) **tidak** disimpan di sini,
+melainkan di `form_answer_selections`; jawaban `FILE_UPLOAD` di
+`form_answer_files` - baris `form_answers`-nya tetap dibuat, tapi ketiga
+kolom `value*`-nya kosong.
+
+Tidak ada kolom `createdAt`/`updatedAt` di tabel ini - waktu pengisian
+dilihat dari `form_responses`. `itemId` pakai `Restrict`, itulah kenapa
+`form_items` memakai soft delete (`deletedAt`): item yang sudah pernah
+dijawab tidak bisa dihapus permanen.
+
+---
+
+### 5.117g `form_answer_selections`
+
+**Fungsi tabel**: Jawaban bertipe pilihan - Multiple Choice, Checkboxes,
+Dropdown, dan Grid. Satu baris = satu pilihan yang dipilih (jadi Checkboxes
+yang memilih 3 opsi menghasilkan 3 baris).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf8192a3b4c5d6e7f809102` | ID unik baris. |
+| `answerId` | String | `NOT NULL`, 🔗 FK | - | `clf708192a3b4c5d6e7f8091` | Jawaban induk. Kolom fisik: `answer_id`. |
+| `optionId` | String | `NOT NULL`, 🔗 FK | - | `clf5e6f708192a3b4c5d6e7f` | Option yang dipilih. Untuk grid: **kolom** yang dipilih (sesuai komentar developer). Kolom fisik: `option_id`. |
+| `rowOptionId` | String | `nullable`, 🔗 FK | - | `clf9a3b4c5d6e7f809102a3b` | Khusus grid: **baris**-nya. `null` untuk tipe non-grid. Kolom fisik: `row_option_id`. |
+| `optionLabelSnapshot` | VarChar | `NOT NULL` | - | `Instagram` | Snapshot label option saat dipilih. Kolom fisik: `option_label_snapshot`. |
+| `rowLabelSnapshot` | VarChar | `nullable` | - | `Kualitas materi` | Snapshot label baris (khusus grid). Kolom fisik: `row_label_snapshot`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK 1**: `answerId` → `form_answers.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- 🔗 **FK 2**: `optionId` → `form_options.id` (relasi `"SelectionOption"`) - **`onDelete: Restrict`**, `onUpdate: Cascade`.
+- 🔗 **FK 3**: `rowOptionId` → `form_options.id` (relasi `"SelectionRow"`), opsional - **`onDelete: Restrict`**, `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([answerId])`, `@@index([optionId])` (dipasang untuk Summary view - hitung jawaban per option, sesuai komentar developer).
+
+#### 📌 Catatan
+
+Dua FK (`optionId`, `rowOptionId`) menunjuk ke tabel yang sama
+(`form_options`) dengan nama relasi berbeda. Tidak ada `@@unique` pada
+tabel ini, jadi secara skema pilihan yang sama bisa tercatat dua kali
+untuk satu jawaban - pencegahannya di level aplikasi. Sama seperti
+`form_answers`, kedua FK pakai `Restrict`, sehingga option yang pernah
+dipilih tidak bisa dihapus permanen (soft delete lewat `form_options.deletedAt`).
+
+---
+
+### 5.117h `form_answer_files`
+
+**Fungsi tabel**: File yang diunggah responder untuk item bertipe
+`FILE_UPLOAD`. Satu jawaban bisa punya beberapa file (batasnya diatur di
+`form_items.config` → `maxFiles`).
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf92a3b4c5d6e7f809102a3` | ID unik file. |
+| `answerId` | String | `NOT NULL`, 🔗 FK | - | `clf708192a3b4c5d6e7f8091` | Jawaban induk. Kolom fisik: `answer_id`. |
+| `originalName` | VarChar | `NOT NULL` | - | `cv-budi-santoso.pdf` | Nama file asli dari responder. Kolom fisik: `original_name`. |
+| `storagePath` | VarChar | `NOT NULL` | - | `/uploads/forms/clf1a2b3/cv-budi-santoso-1729519500.pdf` | Path penyimpanan file di server. Kolom fisik: `storage_path`. |
+| `mimeType` | VarChar | `nullable` | - | `application/pdf` | MIME type file. Kolom fisik: `mime_type`. |
+| `sizeBytes` | Int | `NOT NULL` | - | `245760` | Ukuran file dalam **byte** (beda dari `sizeKB` di `ct_e_learning_assignment_supporting_files` yang dalam KB). Kolom fisik: `size_bytes`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-21T14:03:00Z` | Waktu diunggah. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK**: `answerId` → `form_answers.id` - `onDelete: Cascade`, `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([answerId])`.
+
+#### 📌 Catatan
+
+Sesuai komentar developer di skema: akses file **harus lewat endpoint
+ber-permission** (hanya yang berhak atas form/response tersebut), **jangan
+di-serve sebagai static public** - karena isinya file kiriman responder
+yang bisa bersifat pribadi.
+
+---
+
+*(Modul **Form** sudah lengkap dengan ini - 8 tabel (5.117a-5.117h) dan 7
+enum baru (`FormType`, `FormStatus`, `FormResponderAccess`,
+`FormNavigationAction`, `FormItemType`, `FormOptionKind`,
+`FormResponseStatus`). Penomoran memakai sufiks huruf (`5.117a` dst.)
+supaya nomor section setelahnya (5.118 dst.) tidak bergeser.)*
+
 ## Modul Pendukung (Notifikasi & Utilitas)
 
 > ℹ️ **Catatan**: Tabel-tabel di bagian ini sifatnya **lintas-modul**
@@ -4466,11 +4926,15 @@ relevan untuk ditindaklanjuti tim, bukan cuma catatan sepintas:
 - `companies`/`jobs` (Job Board)  besar cuma data dummy, bukan
   fitur yang sedang berjalan - jangan kaget kalau suatu saat dihapus atau
   malah dibangun serius jadi fitur beneran.
+- `forms.eventId` (Form, 5.117a) belum berupa FK - modul `Event` belum ada
+  di skema, dan ada komentar `TODO` di skema aslinya untuk menambahkan
+  relasinya. Selama belum ada, integritas `eventId` (dan `eventNameSnapshot`)
+  sepenuhnya dijaga di kode aplikasi.
 
 Dokumen ini tidak mencakup hal-hal di luar apa yang tertulis di
 `schema.prisma` - trigger, view, stored procedure, atau kebijakan RLS di
 level PostgreSQL (kalau ada) berada di luar cakupan, karena tidak
 terrepresentasi di Prisma schema.
 
-Terakhir diperbarui mengikuti `schema.prisma` per dokumentasi tabel
-`5.123 jobs` - total **126 tabel** dan **24 enum**.
+Terakhir diperbarui mengikuti `schema.prisma` per dokumentasi modul Form
+(`5.117a`-`5.117h`) - total **134 tabel** dan **31 enum**.
