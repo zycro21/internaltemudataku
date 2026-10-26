@@ -14,12 +14,8 @@
   overflow: hidden;
   cursor: grab;
   background:
-    radial-gradient(
-      circle at 1px 1px,
-      var(--erd-dot) 1.4px,
-      transparent 0
-    )
-    0 0 / 26px 26px,
+    radial-gradient(circle at 1px 1px, var(--erd-dot) 1.4px, transparent 0) 0
+      0 / 26px 26px,
     var(--erd-bg);
 }
 .viewport.panning {
@@ -83,6 +79,7 @@
 
 .tbox {
   position: absolute;
+  box-sizing: border-box; /* tinggi dari engine sudah termasuk border */
   background: var(--erd-tbox-bg);
   border: 1px solid var(--erd-tbox-border);
   border-radius: 9px;
@@ -104,7 +101,9 @@
   z-index: 5;
 }
 .thead {
-  padding: 8px 10px;
+  /* tinggi + line-height diatur dari engine (HEAD_H) lewat inline style */
+  box-sizing: border-box;
+  padding: 0 10px;
   font-size: 12px;
   font-weight: 700;
   color: #0b0e14;
@@ -116,7 +115,9 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 2.5px 9px;
+  /* tinggi diatur dari engine (ROW_H) lewat inline style; isi dipusatkan */
+  box-sizing: border-box;
+  padding: 0 9px;
   font-size: 10.5px;
   border-top: 1px solid var(--erd-row-border);
   white-space: nowrap;

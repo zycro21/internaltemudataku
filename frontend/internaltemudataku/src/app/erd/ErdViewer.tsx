@@ -11,6 +11,7 @@ import type {
   TableDef,
   PositionedTable,
   TableDocsResult,
+  ReleaseNotesResult,
 } from "@/lib/erd/types";
 import {
   MODULE_COLORS,
@@ -18,10 +19,14 @@ import {
   buildRelations,
   relatedIndices,
   boundsForTable,
+  HEAD_H,
+  ROW_H,
 } from "@/lib/erd/erd-engine";
 import styles from "./erd.module.css";
 import ThemeToggle from "./ThemeToggle";
 import DocPanel from "./DocPanel";
+import ReleaseCard, { VersionPill } from "./ReleaseCard";
+import ReleaseNotesModal from "./ReleaseNotesModal";
 
 interface Bounds {
   x: number;
@@ -35,6 +40,7 @@ interface ErdViewerProps {
   initialFetchedAt?: string;
   initialSource?: "github" | "fallback";
   initialError?: string;
+  releaseNotes?: ReleaseNotesResult;
 }
 
 export default function ErdViewer({
@@ -42,12 +48,15 @@ export default function ErdViewer({
   initialFetchedAt,
   initialSource,
   initialError,
+  releaseNotes,
 }: ErdViewerProps) {
   const [tables, setTables] = useState(initialTables);
   const [fetchedAt, setFetchedAt] = useState(initialFetchedAt);
   const [source, setSource] = useState(initialSource);
   const [fetchError, setFetchError] = useState(initialError);
   const [refreshing, setRefreshing] = useState(false);
+  const [releaseOpen, setReleaseOpen] = useState(false);
+  const latestRelease = releaseNotes?.releases[0];
 
   // Dokumentasi tabel (content/database-docs.md). null = masih dimuat.
   const [docs, setDocs] = useState<TableDocsResult | null>(null);
@@ -95,6 +104,10 @@ export default function ErdViewer({
     [tables],
   );
   const relations = useMemo(() => buildRelations(positioned), [positioned]);
+  const tableNames = useMemo(
+    () => new Set(positioned.map((t) => t.table)),
+    [positioned],
+  );
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState({ scale: 1, tx: 0, ty: 0 });
@@ -334,9 +347,17 @@ export default function ErdViewer({
       <aside className="flex w-[290px] min-w-[290px] flex-col gap-4 overflow-y-auto border-r border-erd-border bg-erd-side p-4">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h1 className="text-[15px] font-bold tracking-tight text-erd-text">
-              ERD TemuDataku
-            </h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-[15px] font-bold tracking-tight text-erd-text">
+                ERD TemuDataku
+              </h1>
+              {latestRelease && (
+                <VersionPill
+                  version={latestRelease.version}
+                  onClick={() => setReleaseOpen(true)}
+                />
+              )}
+            </div>
             <div className="mt-1 font-mono text-[11.5px] text-erd-muted">
               {positioned.length} tabel &middot;{" "}
               {positioned.reduce((s, t) => s + t.columns.length, 0)} kolom
@@ -450,7 +471,14 @@ export default function ErdViewer({
           onJump={(idx) => selectTable(idx, true)}
         />
 
-        <div className="mt-auto border-t border-erd-border pt-3 font-mono text-[11px] leading-relaxed text-erd-faint">
+        <div className="mt-auto">
+          <ReleaseCard
+            data={releaseNotes}
+            onOpen={() => setReleaseOpen(true)}
+          />
+        </div>
+
+        <div className="border-t border-erd-border pt-3 font-mono text-[11px] leading-relaxed text-erd-faint">
           {positioned.length} tabel &middot; {moduleEntries.length} modul
           <br />
           Live dari schema.prisma
@@ -594,6 +622,14 @@ export default function ErdViewer({
           />
         )}
       </div>
+
+      <ReleaseNotesModal
+        open={releaseOpen}
+        data={releaseNotes}
+        tableNames={tableNames}
+        onJumpTable={jumpToTableName}
+        onClose={() => setReleaseOpen(false)}
+      />
     </div>
   );
 }
@@ -617,11 +653,14 @@ function TableBox({
         (dim ? " " + styles.dim : "") +
         (hl ? " " + styles.hl : "")
       }
-      style={{ left: t.x, top: t.y, width: t.w }}
+      style={{ left: t.x, top: t.y, width: t.w, height: t.h }}
       onMouseDown={(e) => e.stopPropagation()}
       onClick={onClick}
     >
-      <div className={styles.thead} style={{ background: color }}>
+      <div
+        className={styles.thead}
+        style={{ background: color, height: HEAD_H, lineHeight: `${HEAD_H}px` }}
+      >
         {t.table}
       </div>
       {t.columns.map((c) => (
@@ -632,6 +671,7 @@ function TableBox({
             (c.pk ? " " + styles.ispk : "") +
             (c.fk ? " " + styles.isfk : "")
           }
+          style={{ height: ROW_H }}
         >
           <span className={styles.flag}>{c.pk ? "🔑" : c.fk ? "🔗" : ""}</span>
           <span className={styles.cname}>{c.name}</span>

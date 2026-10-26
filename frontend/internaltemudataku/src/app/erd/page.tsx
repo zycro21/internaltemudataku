@@ -1,5 +1,6 @@
 import ErdViewer from "./ErdViewer";
 import { fetchLiveSchema } from "@/lib/erd/fetch-schema";
+import { loadReleaseNotes } from "@/lib/erd/load-release-notes";
 
 // fetchLiveSchema() calls fetch(..., { cache: "no-store" }) internally, which
 // already opts this route out of static generation -- this export just makes
@@ -14,13 +15,17 @@ export const metadata = {
 };
 
 export default async function ErdPage() {
-  const result = await fetchLiveSchema();
+  const [result, releaseNotes] = await Promise.all([
+    fetchLiveSchema(),
+    loadReleaseNotes(),
+  ]);
   return (
     <ErdViewer
       initialTables={result.tables}
       initialFetchedAt={result.fetchedAt}
       initialSource={result.source}
       initialError={result.error}
+      releaseNotes={releaseNotes}
     />
   );
 }

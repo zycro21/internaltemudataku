@@ -4258,6 +4258,10 @@ dari modul E-Learning (5.47 & 5.52), tidak didefinisikan ulang di sini.)*
 >   (`itemTitleSnapshot`, `optionLabelSnapshot`, dst.), supaya response lama
 >   terbaca persis seperti saat dikirim walau pertanyaan/pilihannya diedit
 >   kemudian (pola audit yang sama dengan `referral_commisions`, 5.89).
+> - **ID dibuat oleh aplikasi**, bukan cuid dari database: bentuknya
+>   `<prefix>_` + 22 karakter acak (mis. `frm_...`), lihat "Format ID Modul
+>   Form" di bawah. `@default(cuid())` di schema hanya cadangan; tabel di
+>   modul lain tetap memakai cuid.
 > - Status & tipe memakai **enum sungguhan** (7 enum, lihat di bawah),
 >   bukan `String` freetext seperti di banyak modul lain.
 > - Modul `Event` **belum ada** di skema. `forms.eventId` cuma kolom
@@ -4290,6 +4294,33 @@ dari modul E-Learning (5.47 & 5.52), tidak didefinisikan ulang di sini.)*
 (`form_sections.nextAction`) dan branching per option
 (`form_options.branchAction`).
 
+### Format ID Modul Form
+
+ID semua tabel modul Form **dibuat oleh aplikasi** lewat `newFormId()` (file
+`form_id.ts`), bukan oleh database. Bentuknya `<prefix>_` diikuti 22 karakter
+acak (128 bit, base64url: huruf besar/kecil, angka, `-`, dan `_`), total 26
+karakter.
+
+| Tabel | Prefix | Contoh |
+|---|---|---|
+| `forms` | `frm_` | `frm_5F9N4wWV4FMKwv53tEFZZw` |
+| `form_sections` | `fsc_` | `fsc_rcVE6gq25Rnk_PQcxkFqIw` |
+| `form_items` | `fit_` | `fit_YX2aoFF8y287hSbCjyU5kQ` |
+| `form_options` | `fop_` | `fop_At82KxVu5lnrwylimGVXHQ` |
+| `form_responses` | `frs_` | `frs_clY5ZIYdutqKsAZiC8gE_Q` |
+| `form_answers` | `fan_` | `fan_WeI697FjBnTVaNyCXYoajQ` |
+| `form_answer_selections` | `fas_` | `fas_G4ORt1TpgOAAtRu_6BnvmA` |
+| `form_answer_files` | `faf_` | `faf_PDrAaSynu25S0VHCBUXymQ` |
+
+- **Tidak ada race condition**: ID tidak dihitung dari data di database (tidak
+  ada counter atau `MAX+1`), jadi dua request bersamaan tidak bisa
+  menghasilkan ID yang sama.
+- **Primary key tetap pengaman terakhir**: kalau (nyaris mustahil) terjadi
+  bentrok, insert gagal dengan error `P2002`, bukan menimpa atau menggandakan
+  data.
+- **Data lama aman**: kolom `id` bertipe `String`, jadi baris lama berformat
+  cuid tetap valid dan tidak perlu migrasi.
+
 ### 5.117a `forms`
 
 **Fungsi tabel**: Master data satu form - induk dari seluruh section,
@@ -4300,7 +4331,7 @@ penerimaan response, pengaturan responder, dan tampilan/tema form.
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf1a2b3c4d5e6f708192a3b` | ID unik form. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `frm_5F9N4wWV4FMKwv53tEFZZw` | ID unik form. Dibuat aplikasi: `frm_` + 22 karakter acak. |
 | `type` | Enum `FormType` | `NOT NULL` | - | `NON_EVENT` | `EVENT` atau `NON_EVENT`. Sesuai komentar developer: **dikunci setelah dibuat (V1)** - tidak boleh diubah belakangan. |
 | `status` | Enum `FormStatus` | `NOT NULL` | `DRAFT` | `PUBLISHED` | `DRAFT`, `PUBLISHED`, atau `ARCHIVED`. `DRAFT` juga dipakai saat unpublish. |
 | `title` | VarChar | `NOT NULL` | - | `Pendaftaran Webinar Data Science` | Judul form. |
@@ -4371,13 +4402,13 @@ menentukan navigasi setelah selesai (lanjut/lompat/submit).
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf2b3c4d5e6f708192a3b4c` | ID unik section. |
-| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form induk. Kolom fisik: `form_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `fsc_rcVE6gq25Rnk_PQcxkFqIw` | ID unik section. Dibuat aplikasi: `fsc_` + 22 karakter acak. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `frm_5F9N4wWV4FMKwv53tEFZZw` | Form induk. Kolom fisik: `form_id`. |
 | `title` | VarChar | `nullable` | - | `Data Diri` | Judul section. |
 | `description` | Text | `nullable` | - | `Isi data diri kamu dengan benar.` | Deskripsi section. |
 | `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan section dalam form. Kolom fisik: `order_number`. |
 | `nextAction` | Enum `FormNavigationAction` | `NOT NULL` | `NEXT` | `GO_TO_SECTION` | Navigasi setelah section ini selesai: `NEXT`, `GO_TO_SECTION`, atau `SUBMIT`. Kolom fisik: `next_action`. |
-| `nextSectionId` | String | `nullable`, 🔗 FK | - | `clf3c4d5e6f708192a3b4c5d` | Section tujuan - diisi kalau `nextAction = GO_TO_SECTION`. Self-relation. Kolom fisik: `next_section_id`. |
+| `nextSectionId` | String | `nullable`, 🔗 FK | - | `fsc_I2bSSaDsD7OPfaw32Aj4Jw` | Section tujuan - diisi kalau `nextAction = GO_TO_SECTION`. Self-relation. Kolom fisik: `next_section_id`. |
 | `deletedAt` | Timestamp(6) | `nullable` | - | `null` (belum dihapus) | **Soft delete.** Kolom fisik: `deleted_at`. |
 | `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
 | `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt`. |
@@ -4416,9 +4447,9 @@ tabel yang sama, supaya urutannya satu daftar dan reorder cukup mengubah
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf4d5e6f708192a3b4c5d6e` | ID unik item. Sesuai komentar developer: **stabil** - jangan pernah di-recreate saat label diedit. |
-| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form induk. **Redundan** dengan `section.formId` - sengaja, supaya query "semua item satu form" cukup satu query. Kolom fisik: `form_id`. |
-| `sectionId` | String | `NOT NULL`, 🔗 FK | - | `clf2b3c4d5e6f708192a3b4c` | Section tempat item berada. Kolom fisik: `section_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `fit_YX2aoFF8y287hSbCjyU5kQ` | ID unik item, dibuat aplikasi: `fit_` + 22 karakter acak. Sesuai komentar developer: **stabil** - jangan pernah di-recreate saat label diedit. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `frm_5F9N4wWV4FMKwv53tEFZZw` | Form induk. **Redundan** dengan `section.formId` - sengaja, supaya query "semua item satu form" cukup satu query. Kolom fisik: `form_id`. |
+| `sectionId` | String | `NOT NULL`, 🔗 FK | - | `fsc_rcVE6gq25Rnk_PQcxkFqIw` | Section tempat item berada. Kolom fisik: `section_id`. |
 | `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan item dalam section. Kolom fisik: `order_number`. |
 | `type` | Enum `FormItemType` | `NOT NULL` | - | `MULTIPLE_CHOICE` | Tipe item - 15 nilai, lihat tabel enum di atas. |
 | `title` | Text | `nullable` | - | `Dari mana kamu tahu webinar ini?` | Label pertanyaan / judul blok. `null` untuk `IMAGE`/`VIDEO`. |
@@ -4478,13 +4509,13 @@ item - dibedakan lewat kolom `kind`. Juga membawa aturan **branching**
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf5e6f708192a3b4c5d6e7f` | ID unik option. |
-| `itemId` | String | `NOT NULL`, 🔗 FK | - | `clf4d5e6f708192a3b4c5d6e` | Item induk. Kolom fisik: `item_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `fop_At82KxVu5lnrwylimGVXHQ` | ID unik option. Dibuat aplikasi: `fop_` + 22 karakter acak. |
+| `itemId` | String | `NOT NULL`, 🔗 FK | - | `fit_YX2aoFF8y287hSbCjyU5kQ` | Item induk. Kolom fisik: `item_id`. |
 | `kind` | Enum `FormOptionKind` | `NOT NULL` | `CHOICE` | `GRID_ROW` | `CHOICE` (pilihan biasa), `GRID_ROW` (baris grid), atau `GRID_COLUMN` (kolom grid). |
 | `label` | VarChar | `NOT NULL` | - | `Instagram` | Teks pilihan / label baris / label kolom. |
 | `orderNumber` | Int | `NOT NULL` | - | `1` | Urutan tampil. Kolom fisik: `order_number`. |
 | `branchAction` | Enum `FormNavigationAction` | `NOT NULL` | `NEXT` | `GO_TO_SECTION` | Aksi navigasi kalau option ini dipilih: `NEXT`, `GO_TO_SECTION`, atau `SUBMIT`. Kolom fisik: `branch_action`. |
-| `branchSectionId` | String | `nullable`, 🔗 FK | - | `clf3c4d5e6f708192a3b4c5d` | Section tujuan - diisi kalau `branchAction = GO_TO_SECTION`. Kolom fisik: `branch_section_id`. |
+| `branchSectionId` | String | `nullable`, 🔗 FK | - | `fsc_I2bSSaDsD7OPfaw32Aj4Jw` | Section tujuan - diisi kalau `branchAction = GO_TO_SECTION`. Kolom fisik: `branch_section_id`. |
 | `deletedAt` | Timestamp(6) | `nullable` | - | `null` (belum dihapus) | **Soft delete.** Kolom fisik: `deleted_at`. |
 | `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-15T10:30:00Z` | Waktu dibuat. |
 | `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-16T08:00:00Z` | Pakai `@updatedAt`. |
@@ -4522,8 +4553,8 @@ komentar developer).
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf6f708192a3b4c5d6e7f80` | ID unik response. |
-| `formId` | String | `NOT NULL`, 🔗 FK | - | `clf1a2b3c4d5e6f708192a3b` | Form yang diisi. Kolom fisik: `form_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `frs_clY5ZIYdutqKsAZiC8gE_Q` | ID unik response. Dibuat aplikasi: `frs_` + 22 karakter acak. |
+| `formId` | String | `NOT NULL`, 🔗 FK | - | `frm_5F9N4wWV4FMKwv53tEFZZw` | Form yang diisi. Kolom fisik: `form_id`. |
 | `userId` | String | `nullable`, 🔗 FK | - | `000016` | Responder - **`null` kalau anonim** (`responderAccess = ANYONE_WITH_LINK`). Kolom fisik: `user_id`. |
 | `respondentEmail` | VarChar | `nullable` | - | `budi.santoso@email.com` | Email responder (relevan kalau `forms.collectEmail = true`). Kolom fisik: `respondent_email`. |
 | `status` | Enum `FormResponseStatus` | `NOT NULL` | `DRAFT` | `SUBMITTED` | `DRAFT` (autosave, **belum** dihitung submission final) atau `SUBMITTED`. |
@@ -4575,9 +4606,9 @@ diedit kemudian.
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf708192a3b4c5d6e7f8091` | ID unik jawaban. |
-| `responseId` | String | `NOT NULL`, 🔗 FK | - | `clf6f708192a3b4c5d6e7f80` | Response induk. Kolom fisik: `response_id`. |
-| `itemId` | String | `NOT NULL`, 🔗 FK | - | `clf4d5e6f708192a3b4c5d6e` | Item yang dijawab. Kolom fisik: `item_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `fan_WeI697FjBnTVaNyCXYoajQ` | ID unik jawaban. Dibuat aplikasi: `fan_` + 22 karakter acak. |
+| `responseId` | String | `NOT NULL`, 🔗 FK | - | `frs_clY5ZIYdutqKsAZiC8gE_Q` | Response induk. Kolom fisik: `response_id`. |
+| `itemId` | String | `NOT NULL`, 🔗 FK | - | `fit_YX2aoFF8y287hSbCjyU5kQ` | Item yang dijawab. Kolom fisik: `item_id`. |
 | `itemTypeSnapshot` | Enum `FormItemType` | `NOT NULL` | - | `SHORT_ANSWER` | Snapshot tipe item saat dijawab. Kolom fisik: `item_type_snapshot`. |
 | `itemTitleSnapshot` | Text | `nullable` | - | `Siapa nama lengkap kamu?` | Snapshot judul/label item saat dijawab. Kolom fisik: `item_title_snapshot`. |
 | `valueText` | Text | `nullable` | - | `Budi Santoso` | Jawaban teks: short answer, paragraph, atau time/duration (format `"HH:mm:ss"`, sesuai komentar developer). Kolom fisik: `value_text`. |
@@ -4622,10 +4653,10 @@ yang memilih 3 opsi menghasilkan 3 baris).
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf8192a3b4c5d6e7f809102` | ID unik baris. |
-| `answerId` | String | `NOT NULL`, 🔗 FK | - | `clf708192a3b4c5d6e7f8091` | Jawaban induk. Kolom fisik: `answer_id`. |
-| `optionId` | String | `NOT NULL`, 🔗 FK | - | `clf5e6f708192a3b4c5d6e7f` | Option yang dipilih. Untuk grid: **kolom** yang dipilih (sesuai komentar developer). Kolom fisik: `option_id`. |
-| `rowOptionId` | String | `nullable`, 🔗 FK | - | `clf9a3b4c5d6e7f809102a3b` | Khusus grid: **baris**-nya. `null` untuk tipe non-grid. Kolom fisik: `row_option_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `fas_G4ORt1TpgOAAtRu_6BnvmA` | ID unik baris. Dibuat aplikasi: `fas_` + 22 karakter acak. |
+| `answerId` | String | `NOT NULL`, 🔗 FK | - | `fan_WeI697FjBnTVaNyCXYoajQ` | Jawaban induk. Kolom fisik: `answer_id`. |
+| `optionId` | String | `NOT NULL`, 🔗 FK | - | `fop_At82KxVu5lnrwylimGVXHQ` | Option yang dipilih. Untuk grid: **kolom** yang dipilih (sesuai komentar developer). Kolom fisik: `option_id`. |
+| `rowOptionId` | String | `nullable`, 🔗 FK | - | `fop_gAdOlxEQCzet1kTVrWXaLw` | Khusus grid: **baris**-nya. `null` untuk tipe non-grid. Kolom fisik: `row_option_id`. |
 | `optionLabelSnapshot` | VarChar | `NOT NULL` | - | `Instagram` | Snapshot label option saat dipilih. Kolom fisik: `option_label_snapshot`. |
 | `rowLabelSnapshot` | VarChar | `nullable` | - | `Kualitas materi` | Snapshot label baris (khusus grid). Kolom fisik: `row_label_snapshot`. |
 
@@ -4658,10 +4689,10 @@ dipilih tidak bisa dihapus permanen (soft delete lewat `form_options.deletedAt`)
 
 | Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
 |---|---|---|---|---|---|
-| `id` | String (cuid) | 🔑 PK, `NOT NULL` | `cuid()` | `clf92a3b4c5d6e7f809102a3` | ID unik file. |
-| `answerId` | String | `NOT NULL`, 🔗 FK | - | `clf708192a3b4c5d6e7f8091` | Jawaban induk. Kolom fisik: `answer_id`. |
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | `cuid()` *(cadangan)* | `faf_PDrAaSynu25S0VHCBUXymQ` | ID unik file. Dibuat aplikasi: `faf_` + 22 karakter acak. |
+| `answerId` | String | `NOT NULL`, 🔗 FK | - | `fan_WeI697FjBnTVaNyCXYoajQ` | Jawaban induk. Kolom fisik: `answer_id`. |
 | `originalName` | VarChar | `NOT NULL` | - | `cv-budi-santoso.pdf` | Nama file asli dari responder. Kolom fisik: `original_name`. |
-| `storagePath` | VarChar | `NOT NULL` | - | `/uploads/forms/clf1a2b3/cv-budi-santoso-1729519500.pdf` | Path penyimpanan file di server. Kolom fisik: `storage_path`. |
+| `storagePath` | VarChar | `NOT NULL` | - | `formAnswerFiles/ans-20261021-9f3a2c71b8e04d56a1c7e39b.pdf` | Path **relatif** ke folder privat `private/formAnswerFiles`. Nama file dibuat server (`ans-<tanggal>-<24 hex>.<ext>`), bukan nama asli responder. Kolom fisik: `storage_path`. |
 | `mimeType` | VarChar | `nullable` | - | `application/pdf` | MIME type file. Kolom fisik: `mime_type`. |
 | `sizeBytes` | Int | `NOT NULL` | - | `245760` | Ukuran file dalam **byte** (beda dari `sizeKB` di `ct_e_learning_assignment_supporting_files` yang dalam KB). Kolom fisik: `size_bytes`. |
 | `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-21T14:03:00Z` | Waktu diunggah. |

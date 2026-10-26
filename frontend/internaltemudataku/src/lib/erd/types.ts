@@ -75,3 +75,35 @@ export interface TableDocsResult {
   /** Ada kalau dokumentasi gagal dimuat / tidak ada tabel yang dikenali. */
   error?: string;
 }
+
+/* ---------- Release notes (content/release-notes.md) ---------- */
+
+export type ReleaseSectionKind = "added" | "changed" | "removed" | "other";
+
+/** Satu sub-bagian "### ..." dalam satu rilis (Ditambahkan / Diubah / Dihapus). */
+export interface ReleaseSection {
+  kind: ReleaseSectionKind;
+  title: string;
+  /** Isi markdown. */
+  body: string;
+}
+
+export interface ReleaseNote {
+  /** Nomor versi tanpa awalan "v", mis. "1.1.0". */
+  version: string;
+  /** Tanggal rilis (YYYY-MM-DD), kalau ditulis. */
+  date?: string;
+  title?: string;
+  /** Teks ringkasan di bawah judul rilis (markdown). */
+  summary: string;
+  sections: ReleaseSection[];
+}
+
+export interface ReleaseNotesResult {
+  /** Urut dari versi terbaru; elemen pertama = versi aktif. */
+  releases: ReleaseNote[];
+  /** Waktu ubah file release notes. */
+  updatedAt?: string;
+  /** Ada kalau file gagal dibaca / tidak ada rilis yang dikenali. */
+  error?: string;
+}

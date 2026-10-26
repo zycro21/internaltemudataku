@@ -21,7 +21,13 @@ const MOD_GAP_X = 90;
 const MOD_GAP_Y = 90;
 const BOX_W = 232;
 const MAX_ROW_W = 5400;
-const ROW_H = 19;
+// Ukuran kotak tabel. Dipakai engine untuk menghitung layout DAN oleh TableBox
+// (ErdViewer) sebagai tinggi tetap, jadi tinggi yang dihitung selalu sama dengan
+// yang tergambar. Tanpa ini, tabel dengan banyak kolom lebih tinggi dari
+// perkiraan engine dan menumpuk tabel di bawahnya.
+export const HEAD_H = 34; // tinggi judul tabel
+export const ROW_H = 22; // tinggi satu baris kolom
+const BOX_BORDER = 2; // border 1px atas + bawah
 const LABEL_H = 44;
 
 /** Computes absolute positions for every table, grouped and boxed by module. */
@@ -38,14 +44,14 @@ export function layoutTables(tables: TableDef[]): {
     x: 0,
     y: 0,
     w: BOX_W,
-    h: 34 + t.columns.length * ROW_H + 8,
+    h: BOX_BORDER + HEAD_H + t.columns.length * ROW_H,
   }));
   positioned.forEach((t) => {
     (byModule[t.module] ||= []).push(t);
   });
 
   const moduleNames = Object.keys(byModule).sort(
-    (a, b) => byModule[b].length - byModule[a].length
+    (a, b) => byModule[b].length - byModule[a].length,
   );
 
   const moduleBounds: Record<string, ModuleBounds> = {};
