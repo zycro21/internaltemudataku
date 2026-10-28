@@ -31,6 +31,20 @@ Aturan singkat:
   angka belakang (1.0.**1**) kalau hanya penjelasan fungsi yang disesuaikan, dan angka depan (**2**.0.0)
   kalau ada perombakan struktur besar.
 
+## v1.3.0 — 2026-10-28 — Jenis Form
+
+Form sekarang dikelompokkan berdasarkan jenis (mis. Pendaftaran, Presensi, Feedback), terpisah untuk Form Event dan Form Non-Event. Total sekarang 135 tabel dan 31 enum.
+
+### Ditambahkan
+
+- Tabel `form_categories`: master jenis form per tipe (`EVENT` atau `NON_EVENT`), berisi nama, deskripsi, dan pembuatnya. Nama jenis unik per tipe.
+- Kolom `categoryId` di tabel `forms`: jenis form (relasi ke `form_categories`, boleh kosong supaya form lama tetap valid). Jenis yang masih dipakai form tidak bisa dihapus.
+
+### Diubah
+
+- Angka total di dokumentasi menjadi 135 tabel dan 31 enum.
+- Dokumentasi modul Form: `forms` mencatat kolom dan relasi jenis, format ID menambah prefix `fct_`, dan tabel `users` mencatat `form_categories` sebagai tabel yang menunjuk ke `users`.
+
 ## v1.2.0 — 2026-10-25 — Modul Form
 
 Penambahan modul **Form** (form builder): 8 tabel dan 7 enum baru. Total sekarang 134 tabel dan 31 enum.

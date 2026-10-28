@@ -31,7 +31,7 @@ mencakup seluruh domain bisnis aplikasi, di antaranya:
 - Serta modul pendukung lain: notifikasi, feedback, sertifikat, export log,
   dan lain-lain.
 
-Per catatan terakhir, skema ini terdiri dari **134 model (tabel)** dan
+Per catatan terakhir, skema ini terdiri dari **135 model (tabel)** dan
 **31 enum**, dikelola dalam satu file `schema.prisma`.
 
 ## 3. Cakupan & Cara Membaca Dokumen Ini
@@ -79,7 +79,7 @@ selanjutnya dari dokumen ini.)*
 - [x] Voucher & Redeem Code
 - [x] Payment & Withdrawal
 - [x] Practice
-- [x] Form (lihat 5.117a-5.117h)
+- [x] Form (lihat 5.117a-5.117i)
 - [x] Modul Pendukung (Notifikasi, Feedback, Sertifikat, dll)
 - [x] Job Board (Dummy - lihat 5.122-5.123)
 
@@ -167,7 +167,7 @@ detail satu per satu di bagian selanjutnya):
 | Voucher | `Voucher` (sbg pembuat), `VoucherUsage` |
 | Redeem Code | `RedeemCode` (sbg pembuat), `RedeemCodeUsage`, `RedeemCodeAttempt` |
 | Article | `Article`, `ArticleElementFavorite`, `ArticleLike`, `ArticleComment`, `ArticleCommentLike` |
-| Form | `Form` (sbg pembuat), `FormResponse` (sbg responder, nullable - bisa anonim) |
+| Form | `Form` (sbg pembuat), `FormCategory` (sbg pembuat jenis form, nullable), `FormResponse` (sbg responder, nullable - bisa anonim) |
 
 ---
 
@@ -4242,6 +4242,11 @@ dari modul E-Learning (5.47 & 5.52), tidak didefinisikan ulang di sini.)*
 > jawaban bertipe pilihan/file disimpan di `FormAnswerSelection` /
 > `FormAnswerFile`.
 >
+> Form dikelompokkan berdasarkan **jenis** (mis. Pendaftaran, Presensi,
+> Feedback) lewat `FormCategory`. Jenis dipisah per tipe form (`EVENT` /
+> `NON_EVENT`), dan satu form menunjuk satu jenis lewat `forms.categoryId`
+> (nullable, supaya form lama tetap valid).
+>
 > Beberapa pola di modul ini **berbeda** dari mayoritas tabel lain di skema:
 >
 > - **Semua kolom multi-kata di-`@map` ke snake_case** (`event_id`,
@@ -4311,6 +4316,7 @@ karakter.
 | `form_answers` | `fan_` | `fan_WeI697FjBnTVaNyCXYoajQ` |
 | `form_answer_selections` | `fas_` | `fas_G4ORt1TpgOAAtRu_6BnvmA` |
 | `form_answer_files` | `faf_` | `faf_PDrAaSynu25S0VHCBUXymQ` |
+| `form_categories` | `fct_` | `fct_7Hq2LmZk9XvB3nTa5RwYcA` |
 
 - **Tidak ada race condition**: ID tidak dihitung dari data di database (tidak
   ada counter atau `MAX+1`), jadi dua request bersamaan tidak bisa
@@ -4336,6 +4342,7 @@ penerimaan response, pengaturan responder, dan tampilan/tema form.
 | `status` | Enum `FormStatus` | `NOT NULL` | `DRAFT` | `PUBLISHED` | `DRAFT`, `PUBLISHED`, atau `ARCHIVED`. `DRAFT` juga dipakai saat unpublish. |
 | `title` | VarChar | `NOT NULL` | - | `Pendaftaran Webinar Data Science` | Judul form. |
 | `description` | Text | `nullable` | - | `Isi form ini untuk mendaftar webinar.` | Deskripsi form. |
+| `categoryId` | String | `nullable`, 🔗 FK | - | `fct_7Hq2LmZk9XvB3nTa5RwYcA` | Jenis form (pengelompokan, mis. Pendaftaran, Presensi). Nullable supaya form yang dibuat sebelum fitur jenis tetap valid. Tipe jenis harus sama dengan `type` form (dijaga aplikasi, bukan DB). Kolom fisik: `category_id`. |
 | `slug` | VarChar | `NOT NULL`, `@unique` | - | `k3x9q2mf7a` | Dipakai di URL responder (`/form/{slug}`). Sesuai komentar developer: **random, bukan dari judul**, supaya link yang sudah dibagikan tidak rusak kalau judul diedit. |
 | `eventId` | String | `nullable` | - | `event-20261020-ab12cd` | ID Event terkait (khusus `type = EVENT`). ⚠️ **Bukan FK sungguhan** - model `Event` belum ada, lihat catatan modul. Kolom fisik: `event_id`. |
 | `eventNameSnapshot` | VarChar | `nullable` | - | `Webinar Data Science 2026` | Nama Event saat dikaitkan, buat info kalau Event-nya dihapus. Kolom fisik: `event_name_snapshot`. |
@@ -4370,12 +4377,14 @@ penerimaan response, pengaturan responder, dan tampilan/tema form.
 #### Primary Key & Foreign Key
 
 - 🔑 **PK**: `id`
-- 🔗 **FK**: `createdById` → `users.id`, opsional - `onDelete: SetNull` (form tetap ada walau pembuatnya dihapus), `onUpdate: Cascade`.
-- **Index tambahan**: `@@index([type, status])`, `@@index([eventId])`, `@@index([createdById])`.
+- 🔗 **FK 1**: `createdById` → `users.id`, opsional - `onDelete: SetNull` (form tetap ada walau pembuatnya dihapus), `onUpdate: Cascade`.
+- 🔗 **FK 2**: `categoryId` → `form_categories.id`, opsional - **`onDelete: Restrict`** (jenis yang masih dipakai form tidak bisa dihapus), `onUpdate: Cascade`.
+- **Index tambahan**: `@@index([type, status])`, `@@index([categoryId])`, `@@index([eventId])`, `@@index([createdById])`.
 
 #### Relasi ke Tabel Lain (ringkasan)
 
-`sections` (→ `form_sections`), `items` (→ `form_items`), `responses` (→
+`category` (→ `form_categories`, banyak-ke-satu), `sections` (→
+`form_sections`), `items` (→ `form_items`), `responses` (→
 `form_responses`).
 
 #### 📌 Catatan
@@ -4712,7 +4721,53 @@ yang bisa bersifat pribadi.
 
 ---
 
-*(Modul **Form** sudah lengkap dengan ini - 8 tabel (5.117a-5.117h) dan 7
+### 5.117i `form_categories`
+
+**Fungsi tabel**: Master data **jenis form** - pengelompokan form di dalam
+satu tipe (mis. Pendaftaran, Submission, Presensi, Feedback). Dipakai di
+halaman "Pilih Jenis" Form Builder: admin memilih jenis dulu, baru membuat
+form di bawahnya. Jenis dipisah per tipe (`EVENT` / `NON_EVENT`), jadi
+Form Event dan Form Non-Event punya daftar jenisnya masing-masing.
+
+#### Kolom
+
+| Kolom | Tipe Data | Constraint | Default | Contoh Value | Keterangan |
+|---|---|---|---|---|---|
+| `id` | String (custom ID) | 🔑 PK, `NOT NULL` | - | `fct_7Hq2LmZk9XvB3nTa5RwYcA` | ID unik jenis. Dibuat aplikasi: `fct_` + 22 karakter acak. Berbeda dari tabel Form lain, tidak ada `cuid()` cadangan. |
+| `type` | Enum `FormType` | `NOT NULL` | - | `EVENT` | Tipe form yang memakai jenis ini: `EVENT` atau `NON_EVENT`. Tidak boleh dicampur. |
+| `name` | VarChar(80) | `NOT NULL` | - | `Pendaftaran` | Nama jenis. |
+| `description` | Text | `nullable` | - | `Form pendaftaran peserta hackathon, kompetisi, seminar, dan webinar.` | Penjelasan kegunaan jenis (tampil di daftar jenis). |
+| `createdById` | String | `nullable`, 🔗 FK | - | `000001` | User pembuat jenis. Kolom fisik: `created_by_id`. |
+| `createdAt` | Timestamp(6) | `NOT NULL` | `now()` | `2026-10-28T09:00:00Z` | Waktu dibuat. Kolom fisik: `created_at`. |
+| `updatedAt` | Timestamp(6) | `NOT NULL` | *(auto)* | `2026-10-28T09:30:00Z` | Pakai `@updatedAt`. Kolom fisik: `updated_at`. |
+
+#### Primary Key & Foreign Key
+
+- 🔑 **PK**: `id`
+- 🔗 **FK**: `createdById` → `users.id`, opsional - `onDelete: SetNull` (jenis tetap ada walau pembuatnya dihapus), `onUpdate: Cascade`.
+- **Constraint tambahan**: `@@unique([type, name])` - nama jenis tidak boleh kembar dalam satu tipe.
+- **Index tambahan**: `@@index([type])`.
+
+#### Relasi ke Tabel Lain (ringkasan)
+
+`forms` (→ `forms`, 1:many - FK-nya ada di `forms.categoryId`).
+
+#### 📌 Catatan
+
+`@@unique([type, name])` di PostgreSQL **peka huruf besar-kecil** -
+`Pendaftaran` dan `pendaftaran` dianggap beda oleh database. Pengecekan
+tanpa peduli huruf dilakukan di service (`form_category.service.ts`);
+unique constraint jadi pengaman terakhir untuk dua request bersamaan.
+
+Kesesuaian `form_categories.type` dengan `forms.type` **tidak ditegakkan
+database** (tidak ada constraint yang membandingkan keduanya) - dicek di
+`createForm` dan di `duplicateForm` (jenis tidak dibawa kalau tipe form
+berubah). `forms.categoryId` pakai `onDelete: Restrict`, jadi jenis yang
+masih dipakai form (termasuk yang sudah diarsipkan) tidak bisa dihapus.
+
+---
+
+*(Modul **Form** sudah lengkap dengan ini - 9 tabel (5.117a-5.117i) dan 7
 enum baru (`FormType`, `FormStatus`, `FormResponderAccess`,
 `FormNavigationAction`, `FormItemType`, `FormOptionKind`,
 `FormResponseStatus`). Penomoran memakai sufiks huruf (`5.117a` dst.)
@@ -4961,11 +5016,15 @@ relevan untuk ditindaklanjuti tim, bukan cuma catatan sepintas:
   di skema, dan ada komentar `TODO` di skema aslinya untuk menambahkan
   relasinya. Selama belum ada, integritas `eventId` (dan `eventNameSnapshot`)
   sepenuhnya dijaga di kode aplikasi.
+- `form_categories.type` dan `forms.type` harus sama, tapi tidak ada
+  constraint di database yang memeriksanya (5.117i) - dijaga di kode
+  aplikasi (`createForm`, `duplicateForm`).
 
 Dokumen ini tidak mencakup hal-hal di luar apa yang tertulis di
 `schema.prisma` - trigger, view, stored procedure, atau kebijakan RLS di
 level PostgreSQL (kalau ada) berada di luar cakupan, karena tidak
 terrepresentasi di Prisma schema.
 
-Terakhir diperbarui mengikuti `schema.prisma` per dokumentasi modul Form
-(`5.117a`-`5.117h`) - total **134 tabel** dan **31 enum**.
+Terakhir diperbarui mengikuti `schema.prisma` per penambahan jenis form
+(`5.117i` `form_categories` dan kolom `forms.categoryId`) - total **135 tabel**
+dan **31 enum**.

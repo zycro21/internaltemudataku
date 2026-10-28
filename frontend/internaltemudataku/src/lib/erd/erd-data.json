@@ -5280,6 +5280,14 @@
         "nullable": true
       },
       {
+        "name": "categoryId",
+        "type": "String",
+        "pk": false,
+        "fk": "form_categories",
+        "unique": false,
+        "nullable": true
+      },
+      {
         "name": "slug",
         "type": "String",
         "pk": false,
@@ -6082,6 +6090,69 @@
       },
       {
         "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      }
+    ]
+  },
+  {
+    "table": "form_categories",
+    "model": "FormCategory",
+    "module": "Form",
+    "columns": [
+      {
+        "name": "id",
+        "type": "String",
+        "pk": true,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "FormType",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "String",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdById",
+        "type": "String",
+        "pk": false,
+        "fk": "users",
+        "unique": false,
+        "nullable": true
+      },
+      {
+        "name": "createdAt",
+        "type": "DateTime",
+        "pk": false,
+        "fk": null,
+        "unique": false,
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
         "type": "DateTime",
         "pk": false,
         "fk": null,
